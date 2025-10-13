@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fantástica Fábrica de Sonhos | Varal dos Sonhos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Header fixo -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Página inicial">
+        <span class="brand-badge">Varal Virtual</span>
+      </a>
+
+      <nav class="menu" aria-label="Menu principal">
+        <a class="menu-link" href="index.html">Início</a>
+        <a class="menu-link" href="cartinhas.html">Varal Virtual</a>
+        <a class="menu-link" href="carrinho.html">Carrinho</a>
+        <a class="menu-link" href="pontos-de-coleta.html">Pontos de Coleta</a>
+        <a class="btn btn-outline" href="login.html">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Espaço para compensar o header fixo -->
+  <div class="header-spacer" aria-hidden="true"></div>
+
+  <!-- Hero -->
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1 class="title">Fantástica <span class="highlight">Fábrica de Sonhos</span></h1>
+          <p class="subtitle">
+            Cada cartinha é uma janela para o sonho de uma criança. <br />
+            Adote com responsabilidade e ajude a transformar histórias!
+          </p>
+
+          <div class="cta-group">
+            <a class="btn btn-primary btn-lg" href="cartinhas.html">
+              Quero Adotar um Sonho
+            </a>
+            <a class="btn btn-soft" href="como-funciona.html">
+              Como funciona
+            </a>
+          </div>
+
+          <ul class="hero-list" aria-label="Benefícios">
+            <li>Processo simples e transparente</li>
+            <li>Acompanhamento por e-mail e WhatsApp</li>
+            <li>Pontos de coleta próximos de você</li>
+          </ul>
+        </div>
+
+        <div class="hero-art">
+          <!-- Espaço para futura ilustração ou banner (opcional) -->
+          <div class="cloud-card" role="img" aria-label="Ilustração de nuvem com brinquedos">
+            <div class="cloud">Varal dos Sonhos</div>
+            <div class="line"></div>
+            <div class="toys" aria-hidden="true">🧸 🐨 🚗 🦖 🧒</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção de avisos/eventos (placeholder) -->
+    <section class="strip">
+      <div class="container strip-grid">
+        <div>
+          <h2 class="h2">Próximos eventos</h2>
+          <p>Campanhas itinerantes em escolas de São Paulo — a cada 2 meses.</p>
+        </div>
+        <a class="btn btn-outline" href="eventos.html">Ver agenda</a>
+      </div>
+    </section>
+
+    <!-- Seção de destaque -->
+    <section class="features">
+      <div class="container features-grid">
+        <article class="card">
+          <h3>Transparência</h3>
+          <p>Status da adoção em tempo real e confirmação no ponto de coleta.</p>
+        </article>
+        <article class="card">
+          <h3>Acessibilidade</h3>
+          <p>Site responsivo, simples e leve. Funciona em qualquer dispositivo.</p>
+        </article>
+        <article class="card">
+          <h3>Conexão</h3>
+          <p>Integração com e-mail e WhatsApp para notificações importantes.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé fixo -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <span>© 2025 Varal dos Sonhos</span>
+      <span>Desenvolvido com amor 💙</span>
+    </div>
+  </footer>
+
+  <!-- Espaço para compensar o footer fixo -->
+  <div class="footer-spacer" aria-hidden="true"></div>
+
+  <!-- Assistente Virtual: Cloudinho -->
+  <button class="cloudinho-button" id="cloudinhoBtn" aria-label="Abrir assistente Cloudinho">
+    <img src="./imagens/cloudinho.png" alt="Cloudinho, assistente virtual" />
+  </button>
+
+    <!-- Balão fixo de boas-vindas -->
+  <div class="cloudinho-label">
+    ☁️ Oi! Eu sou o <strong>Cloudinho</strong><br>
+    Seu assistente virtual! Clique em mim para ajuda 💙
+  </div>
+
+
+  <div class="cloudinho-bubble" id="cloudinhoBubble" role="dialog" aria-live="polite" aria-hidden="true">
+    <p id="cloudinhoText">Oi! Eu sou o Cloudinho ☁️ Posso te ajudar a encontrar uma cartinha?</p>
+    <div class="bubble-actions">
+      <button class="btn btn-soft" data-action="adotar">Quero adotar</button>
+      <button class="btn btn-outline" data-action="contato">Falar com a equipe</button>
+    </div>
+  </div>
+
+  <!-- JS mínimo para o Cloudinho -->
+  <script>
+    (function () {
+      const bubble = document.getElementById('cloudinhoBubble');
+      const btn = document.getElementById('cloudinhoBtn');
+      const text = document.getElementById('cloudinhoText');
+
+      const mensagens = [
+        "Oi! Eu sou o Cloudinho ☁️ Posso te ajudar a encontrar uma cartinha?",
+        "Sabia que você pode adotar mais de um sonho? 💙",
+        "Tem um ponto de coleta pertinho de você. Quer ver?",
+        "Dúvidas? Eu explico o passo a passo rapidinho!"
+      ];
+      let i = 0;
+
+      function toggleBubble() {
+        const open = bubble.getAttribute('aria-hidden') === 'false';
+        bubble.setAttribute('aria-hidden', open ? 'true' : 'false');
+      }
+
+      btn.addEventListener('click', toggleBubble);
+
+      bubble.addEventListener('click', (e) => {
+        if (e.target.dataset.action === 'adotar') {
+          window.location.href = 'cartinhas.html';
+        }
+        if (e.target.dataset.action === 'contato') {
+          window.location.href = 'contato.html';
+        }
+      });
+
+      // Rotaciona mensagens quando a bolha estiver visível
+      setInterval(() => {
+        if (bubble.getAttribute('aria-hidden') === 'false') {
+          i = (i + 1) % mensagens.length;
+          text.textContent = mensagens[i];
+        }
+      }, 5000);
+    })();
+  </script>
+</body>
+</html>

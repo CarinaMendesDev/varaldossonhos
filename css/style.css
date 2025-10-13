@@ -1,0 +1,389 @@
+/* =========================================================
+   🌈 VARAL DOS SONHOS - STYLE.CSS
+   Estrutura visual principal do site "Fantástica Fábrica de Sonhos"
+   ---------------------------------------------------------
+   Inclui:
+   - Cores e variáveis (design tokens)
+   - Header e Footer fixos
+   - Botões e tipografia
+   - Hero (área principal)
+   - Seções de eventos e features
+   - Assistente Virtual Cloudinho
+   ---------------------------------------------------------
+   Autor: Carina Mendes Dev
+   Data: 2025
+   ========================================================= */
+
+/* =========================================================
+   🎨 VARIÁVEIS DE DESIGN (Tokens)
+   ========================================================= */
+:root {
+  --bg: #e9f2fb; /* Cor de fundo geral */
+  --bg-hero: linear-gradient(180deg, #eef6ff 0%, #e6f0fb 60%, #e9f2fb 100%);
+  --brand-50: #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-200: #bfdbfe;
+  --brand-300: #93c5fd;
+  --brand-400: #60a5fa;
+  --brand-500: #3b82f6; /* Azul principal */
+  --brand-600: #2563eb;
+  --brand-700: #1d4ed8;
+  --ink: #162033;       /* Cor do texto principal */
+  --muted: #667085;     /* Texto secundário */
+  --white: #ffffff;
+  --surface: #ffffffcc;
+  --shadow: 0 10px 30px rgba(16, 24, 40, .08);
+  --radius: 18px;
+  --radius-lg: 26px;
+  --header-h: 64px;
+  --footer-h: 56px;
+}
+
+/* =========================================================
+   🧱 BASE E RESET
+   ========================================================= */
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+/* Contêiner padrão para centralizar o conteúdo */
+.container {
+  width: min(1120px, 92vw);
+  margin-inline: auto;
+}
+
+/* =========================================================
+   📌 HEADER FIXO
+   ========================================================= */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--header-h);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: saturate(150%) blur(6px);
+  border-bottom: 1px solid #e6eef9;
+  z-index: 20;
+}
+.header-spacer {
+  height: var(--header-h);
+}
+.nav {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--brand-100);
+  color: var(--brand-700);
+  font-weight: 700;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .04);
+}
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.menu-link {
+  text-decoration: none;
+  color: var(--ink);
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: background .2s ease;
+}
+.menu-link:hover {
+  background: var(--brand-50);
+}
+
+/* =========================================================
+   🔘 BOTÕES PADRÃO
+   ========================================================= */
+.btn {
+  --btn-bg: var(--surface);
+  --btn-ink: var(--ink);
+  --btn-brd: #dbe3f3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--btn-brd);
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .2s ease, background .2s ease;
+  box-shadow: 0 1px 0 rgba(16, 24, 40, .04);
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Botão primário (azul principal) */
+.btn-primary {
+  --btn-bg: var(--brand-500);
+  --btn-ink: var(--white);
+  --btn-brd: var(--brand-500);
+}
+
+/* Botão contornado */
+.btn-outline {
+  --btn-bg: #fff;
+  --btn-ink: var(--brand-700);
+  --btn-brd: var(--brand-300);
+  background: linear-gradient(#fff, #fff) padding-box,
+             linear-gradient(120deg, #c7ddff, #a7c8ff) border-box;
+  border: 1px solid transparent;
+}
+
+/* Botão suave (azul claro) */
+.btn-soft {
+  --btn-bg: var(--brand-100);
+  --btn-ink: var(--brand-700);
+  --btn-brd: var(--brand-100);
+}
+.btn-lg {
+  padding: 14px 22px;
+  border-radius: 14px;
+}
+
+/* =========================================================
+   💭 HERO (CABEÇALHO PRINCIPAL DA PÁGINA)
+   ========================================================= */
+.hero {
+  background: var(--bg-hero);
+  padding: 48px 0 24px;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 36px;
+}
+@media (max-width: 960px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.title {
+  font-size: clamp(28px, 3.2vw, 44px);
+  line-height: 1.1;
+  margin: 8px 0 10px;
+}
+.highlight {
+  color: var(--brand-700);
+}
+.subtitle {
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+.cta-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 16px;
+}
+.hero-list {
+  color: #415170;
+  margin: 8px 0 0 16px;
+}
+
+/* Área da ilustração */
+.hero-art {
+  display: grid;
+  place-items: center;
+}
+.cloud-card {
+  width: min(520px, 84%);
+  padding: 28px 18px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.cloud {
+  font-weight: 700;
+  color: var(--brand-700);
+  font-size: clamp(20px, 2.4vw, 28px);
+  background: #f2f7ff;
+  padding: 18px 22px;
+  border-radius: 999px;
+  display: inline-block;
+  box-shadow: inset 0 -4px 0 rgba(59, 130, 246, .1);
+}
+.line {
+  height: 2px;
+  background: var(--brand-200);
+  margin: 16px 0;
+}
+.toys {
+  font-size: 22px;
+}
+
+/* =========================================================
+   📢 SEÇÃO: PRÓXIMOS EVENTOS
+   ========================================================= */
+.strip {
+  background: #f6faff;
+  border-top: 1px solid #eaf2ff;
+  border-bottom: 1px solid #eaf2ff;
+}
+.strip-grid {
+  padding: 18px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.h2 {
+  margin: 0 0 6px;
+}
+
+/* =========================================================
+   🌟 SEÇÃO: FEATURES (CARDS DE DESTAQUE)
+   ========================================================= */
+.features {
+  padding: 28px 0 60px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 960px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.card {
+  background: #fff;
+  padding: 18px 18px 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.card h3 {
+  margin: 2px 0 8px;
+  color: var(--brand-700);
+}
+.card p {
+  margin: 0;
+  color: #445068;
+}
+
+/* =========================================================
+   🦶 RODAPÉ FIXO
+   ========================================================= */
+.site-footer {
+  position: fixed;
+  inset: auto 0 0 0;
+  height: var(--footer-h);
+  background: #ffffffd9;
+  border-top: 1px solid #e6eef9;
+  backdrop-filter: blur(6px);
+  z-index: 20;
+}
+.footer-spacer {
+  height: var(--footer-h);
+}
+.footer-grid {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* =========================================================
+   ☁️ CLOUDINHO - ASSISTENTE VIRTUAL (Versão 2.0)
+   ========================================================= */
+.cloudinho-button {
+  position: fixed;
+  right: 32px;
+  bottom: calc(var(--footer-h) + 28px);
+  width: 200px;   /* tamanho dobrado */
+  height: 200px;
+  border-radius: 50%;
+  border: none;
+  background: transparent; /* sem fundo */
+  box-shadow: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 6px;
+  z-index: 40;
+  transition: transform .15s ease;
+}
+
+.cloudinho-button:hover {
+  transform: translateY(-4px);
+}
+
+.cloudinho-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* flutuação suave */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+/* 💬 Balão fixo de boas-vindas */
+.cloudinho-label {
+  position: fixed;
+  right: 240px; /* distância do mascote */
+  bottom: calc(var(--footer-h) + 130px);
+  background: #ffffffee;
+  color: var(--brand-700);
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 12px 18px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  font-size: 15px;
+  max-width: 260px;
+  z-index: 39;
+  animation: fadeInUp .8s ease;
+}
+
+/* pequena animação de entrada */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* triângulo do balão */
+.cloudinho-label::after {
+  content: '';
+  position: absolute;
+  right: -10px;
+  bottom: 18px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid #ffffffee;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
