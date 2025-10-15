@@ -1,4 +1,9 @@
+// /api/cadastro.js
 import Airtable from "airtable";
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config({ path: path.resolve("./config/.env.local") });
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -8,6 +13,7 @@ export default async function handler(req, res) {
   try {
     const apiKey = process.env.AIRTABLE_API_KEY;
     const baseId = process.env.AIRTABLE_BASE_ID;
+    const tableName = process.env.AIRTABLE_TABLE_NAME || "usuario";
 
     if (!apiKey || !baseId) {
       console.error("❌ Variáveis de ambiente ausentes:", { apiKey, baseId });
@@ -15,43 +21,62 @@ export default async function handler(req, res) {
     }
 
     const base = new Airtable({ apiKey }).base(baseId);
-    const { nome, cep, endereco, cidade, email, telefone, tipo_usuario, senha } = req.body;
 
-    console.log("📨 Dados recebidos:", { nome, cep, endereco, cidade, email, telefone, tipo_usuario });
+    // Campos esperados do front
+    const {
+      nome,
+      cep,
+      endereco,               // string composta enviada pelo front (logradouro, numero, complemento, bairro)
+      endereco_logradouro,
+      endereco_numero,
+      endereco_complemento,
+      endereco_bairro,
+      cidade,
+      email,
+      telefone,
+      tipo_usuario,
+      senha
+    } = req.body;
 
-    // 🔍 Verifica se o e-mail já existe
-    const existentes = await base("usuario")
+    // Validações básicas
+    if (!nome || !email || !senha) {
+      return res.status(400).json({ error: "Campos obrigatórios faltando." });
+    }
+
+    // Verifica email existente
+    const existentes = await base(tableName)
       .select({ filterByFormula: `{email} = "${email}"` })
       .firstPage();
 
     if (existentes.length > 0) {
-      console.log("⚠️ E-mail já existente:", email);
       return res.status(409).json({ error: "E-mail já cadastrado." });
     }
 
-    // 🆕 Cria registro no Airtable
-    const novo = await base("usuario").create([
+    const novo = await base(tableName).create([
       {
         fields: {
           id_usuario: `u${Date.now().toString().slice(-6)}`,
-          nome: nome,
-          cep: cep,
-          endereco: endereco,
-          cidade: cidade || "São Paulo",
-          email: email,
-          telefone: telefone || "00000-0000",
-          tipo_usuario: tipo_usuario,
-          senha: senha,
+          nome,
+          cep,
+          endereco,
+          endereco_logradouro,
+          endereco_numero,
+          endereco_complemento,
+          endereco_bairro,
+          cidade: cidade || "",
+          email,
+          telefone: telefone || "",
+          tipo_usuario: tipo_usuario || "doador",
+          senha,
           status: "ativo",
-          data_cadastro: new Date().toISOString().split("T")[0],
-        },
-      },
+          data_cadastro: new Date().toISOString().split("T")[0]
+        }
+      }
     ]);
 
-    console.log("✅ Novo usuário criado:", novo[0].id);
-    res.status(200).json({ message: "Usuário cadastrado com sucesso!" });
-  } catch (erro) {
-    console.error("❌ Erro detalhado:", erro);
-    res.status(500).json({ error: "Erro ao conectar com o Airtable.", detalhe: erro.message });
+    return res.status(200).json({ message: "Usuário cadastrado com sucesso.", id: novo[0].id });
+  } catch (err) {
+    console.error("Erro no /api/cadastro:", err);
+    return res.status(500).json({ error: "Erro ao cadastrar usuário.", detalhe: err.message });
   }
 }

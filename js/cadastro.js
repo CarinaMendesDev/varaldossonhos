@@ -1,75 +1,67 @@
-// ==============================
-// cadastro.js
-// Envia dados do formulário de cadastro ao backend (Airtable)
-// ==============================
-
+// js/cadastro.js
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formCadastro");
+  if (!form) return;
 
-  if (!form) {
-    console.error("❌ Formulário de cadastro não encontrado!");
-    return;
-  }
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    // 🧩 Coleta os dados do formulário
     const nome = document.getElementById("nome").value.trim();
     const cep = document.getElementById("cep").value.trim();
-    const endereco = document.getElementById("endereco").value.trim();
+    const logradouro = document.getElementById("endereco_logradouro").value.trim();
+    const numero = document.getElementById("endereco_numero").value.trim();
+    const complemento = document.getElementById("endereco_complemento").value.trim();
+    const bairro = document.getElementById("endereco_bairro").value.trim();
     const cidade = document.getElementById("cidade").value.trim();
     const email = document.getElementById("email").value.trim();
     const telefone = document.getElementById("telefone").value.trim();
     const tipo_usuario = document.getElementById("tipo_usuario").value;
     const senha = document.getElementById("senha").value.trim();
 
-    // ⚠️ Validação básica
-    if (!nome || !email || !senha || !tipo_usuario) {
-      alert("Por favor, preencha todos os campos obrigatórios.");
+    if (!nome || !email || !senha || !tipo_usuario || !logradouro || !numero || !cidade) {
+      alert("Por favor, preencha todos os campos obrigatórios (incluindo número).");
       return;
     }
 
-    // 🔄 Monta o objeto que será enviado para a API
-    const dados = {
+    const endereco = `${logradouro}, ${numero}${complemento ? " — " + complemento : ""}${bairro ? " — " + bairro : ""}`;
+
+    const payload = {
       nome,
       cep,
       endereco,
+      endereco_logradouro: logradouro,
+      endereco_numero: numero,
+      endereco_complemento: complemento,
+      endereco_bairro: bairro,
       cidade,
       email,
       telefone,
       tipo_usuario,
-      senha,
+      senha
     };
 
     try {
-      // 📨 Envia via POST para a API
-      const resposta = await fetch("/api/cadastro", {
+      console.log("Enviando para /api/cadastro:", payload);
+      const resp = await fetch("/api/cadastro", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dados),
+        body: JSON.stringify(payload)
       });
 
-      const resultado = await resposta.json();
+      const data = await resp.json();
 
-      if (!resposta.ok) {
-        console.error("❌ Erro da API:", resultado);
-        alert(resultado.error || "Erro ao cadastrar. Tente novamente.");
+      if (!resp.ok) {
+        console.error("API retornou erro:", data);
+        alert(data.error || data.message || "Erro ao cadastrar.");
         return;
       }
 
-      // ✅ Cadastro bem-sucedido
-      alert("🎉 Cadastro realizado com sucesso!");
+      alert("Cadastro realizado com sucesso!");
       form.reset();
-
-      // Redireciona para login após 2 segundos
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 2000);
-
-    } catch (erro) {
-      console.error("❌ Erro na requisição:", erro);
-      alert("Erro ao conectar com o servidor. Tente novamente mais tarde.");
+      setTimeout(() => { window.location.href = "login.html"; }, 1200);
+    } catch (err) {
+      console.error("Erro ao conectar com o servidor:", err);
+      alert("Erro de conexão. Tente novamente mais tarde.");
     }
   });
 });
