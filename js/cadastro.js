@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      alert("Cadastro realizado com sucesso!");
+      alert("🎉Cadastro realizado com sucesso!🎉");
       form.reset();
       setTimeout(() => {
         window.location.href = "login.html";

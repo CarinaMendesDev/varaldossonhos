@@ -1,56 +1,34 @@
-// api/cartinhas.js
-import Airtable from "airtable";
+// /api/cartinhas.js
+import { conectarAirtable } from "../config/conectarAirtable.js";
 
 export default async function handler(req, res) {
-  // Permitir apenas requisições GET
-  if (req.method !== "GET") {
-    return res.status(405).json({ error: "Método não permitido" });
-  }
-
   try {
-    // Conexão com o Airtable
-    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
-      .base(process.env.AIRTABLE_BASE_ID);
+    const base = await conectarAirtable();
+    const tabela = base("cartinhas");
 
-    // Busca na tabela "Cartinhas"
-    const records = await base("Cartinhas")
+    const registros = await tabela
       .select({
-        fields: [
-          "NomeCrianca",
-          "Idade",
-          "Sonho",
-          "TemIrmaos",
-          "IdadeIrmaos",
-          "FotoCartinha",
-          "Status",
-          "Cidade",
-          "Escola"
-        ],
-        filterByFormula: "{Status} = 'Disponível'"
+        filterByFormula: "status = 'disponível'"
       })
       .all();
 
-    // Formatar a resposta
-    const cartinhas = records.map(record => ({
-      id: record.id,
-      nome: record.fields.NomeCrianca,
-      idade: record.fields.Idade,
-      sonho: record.fields.Sonho,
-      temIrmaos: record.fields.TemIrmaos,
-      idadeIrmaos: record.fields.IdadeIrmaos,
-      foto: record.fields.FotoCartinha?.[0]?.url || null,
-      cidade: record.fields.Cidade,
-      escola: record.fields.Escola,
-      status: record.fields.Status
-    }));
-
-    // Retorna em JSON
-    return res.status(200).json({ sucesso: true, dados: cartinhas });
-  } catch (erro) {
-    console.error("Erro ao buscar cartinhas:", erro);
-    return res.status(500).json({
-      sucesso: false,
-      mensagem: "Erro interno ao buscar cartinhas."
+    const cartinhas = registros.map(r => {
+      const f = r.fields;
+      return {
+        id: r.id,
+        primeiro_nome: f["primeiro_nome"] || (f["nome_crianca"]?.split(" ")[0] ?? "Anônimo"),
+        idade: f["idade"] || "",
+        sonho: f["sonho"] || "",
+        irmaos: f["tem_irmaos"] || "Não informado",
+        imagem_cartinha: f["imagem_cartinha"] ? f["imagem_cartinha"][0].url : "",
+        ponto_coleta: f["ponto_coleta"] || "",
+        sexo: f["sexo"] || "Menino"
+      };
     });
+
+    res.status(200).json(cartinhas);
+  } catch (err) {
+    console.error("Erro ao buscar cartinhas:", err);
+    res.status(500).json({ error: "Erro ao buscar cartinhas" });
   }
 }

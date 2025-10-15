@@ -1,0 +1,98 @@
+.varal-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 1.5rem;
+  padding: 2rem;
+  justify-content: center;
+  scrollbar-width: thin;
+}
+
+.varal-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.varal-container::-webkit-scrollbar-thumb {
+  background-color: #9dbbf8;
+  border-radius: 10px;
+}
+
+.cartinha {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 240px;
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+}
+
+.cartinha:hover {
+  transform: rotate(1deg) scale(1.03);
+}
+
+.cartinha img.cartinha-foto {
+  width: 100%;
+  border-radius: 8px;
+  cursor: zoom-in;
+}
+
+.cartinha img.personagem {
+  width: 80px;
+  height: 80px;
+  margin-top: 10px;
+  border-radius: 50%;
+}
+
+.prendedor {
+  width: 30px;
+  position: absolute;
+  top: -20px;
+  left: calc(50% - 15px);
+}
+
+.cartinha-info {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.cartinha-info strong {
+  color: #1e3a8a;
+}
+
+.botao-adotar {
+  background-color: #1e3a8a;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.botao-adotar:hover {
+  background-color: #2563eb;
+}
+
+/* Zoom */
+#zoomOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+#zoomOverlay img {
+  max-width: 80%;
+  max-height: 80%;
+  border-radius: 10px;
+  cursor: zoom-out;
+}
