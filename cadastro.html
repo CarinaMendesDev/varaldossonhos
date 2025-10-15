@@ -5,94 +5,67 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cadastro | Varal dos Sonhos 💙</title>
 
-  <!-- 🌐 Fontes e Estilos -->
   <link rel="stylesheet" href="css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* === Ajuste de responsividade e centralização === */
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(180deg, #E6F0FF 0%, #F8F9FF 100%);
-      margin: 0;
-    }
-
+    /* --- Ajustes de centralização e responsividade --- */
     .form-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      flex: 1;
-      padding: 2rem;
+      padding: 2rem 1rem;
+      min-height: 80vh;
     }
-
-    .form-section {
+    .form-section.card {
       background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-      max-width: 420px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 2rem;
       width: 100%;
-      padding: 2rem 2.5rem;
+      max-width: 420px;
     }
-
     .form-section h2 {
       text-align: center;
-      margin-bottom: 0.5rem;
-      color: #2a4d9b;
+      margin-bottom: 1rem;
+      font-weight: 600;
     }
-
     .form-section p {
       text-align: center;
-      margin-bottom: 1.5rem;
       color: #555;
+      margin-bottom: 1.5rem;
     }
-
-    form label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-      color: #333;
-    }
-
-    form input, form select {
+    input, select {
       width: 100%;
-      padding: 0.7rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
+      padding: 10px;
       border-radius: 8px;
-      font-size: 0.95rem;
+      border: 1px solid #d0d7e2;
+      font-family: 'Poppins', sans-serif;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
     }
-
-    .btn-primary {
+    input:focus, select:focus {
+      border-color: #3b82f6;
+      outline: none;
+    }
+    button.btn-primary {
       width: 100%;
-      background: #2a4d9b;
-      color: #fff;
-      padding: 0.8rem;
+      background-color: #1e3a8a;
+      color: white;
       border: none;
+      padding: 12px;
       border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: 16px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: background-color 0.3s;
     }
-
-    .btn-primary:hover {
-      background: #1f3e7b;
+    button.btn-primary:hover {
+      background-color: #2563eb;
     }
-
-    .text-center {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-
-    /* 📱 Mobile-friendly */
     @media (max-width: 480px) {
-      .form-section {
+      .form-section.card {
         padding: 1.5rem;
-        max-width: 95%;
+        max-width: 90%;
       }
     }
   </style>
@@ -137,7 +110,7 @@
         <label for="cidade">Cidade</label>
         <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo" required>
 
-        <button type="submit" class="btn-primary">Cadastrar</button>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
       </form>
 
       <p class="text-center">Já possui conta? <a href="login.html">Entrar</a></p>

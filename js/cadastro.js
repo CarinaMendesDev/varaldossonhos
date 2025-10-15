@@ -1,7 +1,6 @@
 // ===============================
 // 📘 Cadastro de Usuários — Varal dos Sonhos
 // ===============================
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formCadastro");
 
@@ -31,8 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const baseURL = window.location.hostname.includes("vercel.app")
-        ? "" // produção
-        : "https://varaldossonhos-sp.vercel.app"; // desenvolvimento local
+        ? ""
+        : "https://varaldossonhos-sp.vercel.app";
 
       const resposta = await fetch(`${baseURL}/api/cadastro`, {
         method: "POST",
@@ -43,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await resposta.json();
 
       if (resposta.ok) {
-        alert("🎉 Cadastro realizado com sucesso!");
+        alert("🎉 Cadastro realizado com sucesso! Faça login para continuar.");
         form.reset();
         window.location.href = "login.html";
       } else {
