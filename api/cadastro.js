@@ -14,11 +14,10 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Variáveis de ambiente ausentes." });
     }
 
-    console.log("🔑 Conectando ao Airtable com base:", baseId);
     const base = new Airtable({ apiKey }).base(baseId);
+    const { nome, cep, endereco, cidade, email, telefone, tipo_usuario, senha } = req.body;
 
-    const { nome, email, telefone, cidade, tipo_usuario, senha } = req.body;
-    console.log("📨 Dados recebidos:", { nome, email, telefone, cidade, tipo_usuario, senha });
+    console.log("📨 Dados recebidos:", { nome, cep, endereco, cidade, email, telefone, tipo_usuario });
 
     // 🔍 Verifica se o e-mail já existe
     const existentes = await base("usuario")
@@ -30,15 +29,17 @@ export default async function handler(req, res) {
       return res.status(409).json({ error: "E-mail já cadastrado." });
     }
 
-    // 🔢 Cria registro
+    // 🆕 Cria registro no Airtable
     const novo = await base("usuario").create([
       {
         fields: {
           id_usuario: `u${Date.now().toString().slice(-6)}`,
           nome: nome,
+          cep: cep,
+          endereco: endereco,
+          cidade: cidade || "São Paulo",
           email: email,
           telefone: telefone || "00000-0000",
-          cidade: cidade || "São Paulo",
           tipo_usuario: tipo_usuario,
           senha: senha,
           status: "ativo",
@@ -51,8 +52,6 @@ export default async function handler(req, res) {
     res.status(200).json({ message: "Usuário cadastrado com sucesso!" });
   } catch (erro) {
     console.error("❌ Erro detalhado:", erro);
-    res
-      .status(500)
-      .json({ error: "Erro ao conectar com o Airtable.", detalhe: erro.message });
+    res.status(500).json({ error: "Erro ao conectar com o Airtable.", detalhe: erro.message });
   }
 }
