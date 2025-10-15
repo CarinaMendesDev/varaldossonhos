@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* --- Ajustes de centralização e responsividade --- */
     .form-container {
       display: flex;
       justify-content: center;
@@ -17,6 +16,7 @@
       padding: 2rem 1rem;
       min-height: 80vh;
     }
+
     .form-section.card {
       background: #fff;
       border-radius: 16px;
@@ -25,16 +25,19 @@
       width: 100%;
       max-width: 420px;
     }
+
     .form-section h2 {
       text-align: center;
       margin-bottom: 1rem;
       font-weight: 600;
     }
+
     .form-section p {
       text-align: center;
       color: #555;
       margin-bottom: 1.5rem;
     }
+
     input, select {
       width: 100%;
       padding: 10px;
@@ -44,10 +47,12 @@
       margin-bottom: 1rem;
       transition: border-color 0.2s;
     }
+
     input:focus, select:focus {
       border-color: #3b82f6;
       outline: none;
     }
+
     button.btn-primary {
       width: 100%;
       background-color: #1e3a8a;
@@ -59,9 +64,11 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
+
     button.btn-primary:hover {
       background-color: #2563eb;
     }
+
     @media (max-width: 480px) {
       .form-section.card {
         padding: 1.5rem;
@@ -72,9 +79,14 @@
 </head>
 
 <body>
+  <!-- ===============================
+       CABEÇALHO
+       =============================== -->
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="index.html"><span class="brand-badge">Varal Virtual</span></a>
+      <a class="brand" href="index.html">
+        <span class="brand-badge">Varal Virtual</span>
+      </a>
       <nav class="menu">
         <a class="menu-link" href="index.html">Início</a>
         <a class="menu-link" href="cartinhas.html">Varal Virtual</a>
@@ -84,6 +96,9 @@
     </div>
   </header>
 
+  <!-- ===============================
+       FORMULÁRIO DE CADASTRO
+       =============================== -->
   <main class="container form-container">
     <section class="form-section card">
       <h2>💙 Crie sua conta</h2>
@@ -93,15 +108,21 @@
         <label for="nome">Nome completo</label>
         <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
 
+        <label for="cep">CEP</label>
+        <input type="text" id="cep" name="cep" placeholder="Digite seu CEP" maxlength="9" onblur="buscarEnderecoPorCEP()" required>
+
+        <label for="endereco">Endereço</label>
+        <input type="text" id="endereco" name="endereco" placeholder="Rua, número, complemento" required>
+
+        <label for="cidade">Cidade</label>
+        <input type="text" id="cidade" name="cidade" placeholder="Cidade" required>
+       
         <label for="email">E-mail</label>
         <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
 
-        <label for="telefone">telefone</label>
-        <input type="telefone" id="telefone" name="telefone" placeholder="Digite seu telefone" required>
+        <label for="telefone">Telefone</label>
+        <input type="tel" id="telefone" name="telefone" placeholder="Digite seu telefone" required>
 
-        <label for="cidade">Cidade</label>
-        <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo" required>
-        
         <label for="tipo_usuario">Tipo de Usuário</label>
         <select id="tipo_usuario" name="tipo_usuario" required>
           <option value="">Selecione...</option>
@@ -120,6 +141,9 @@
     </section>
   </main>
 
+  <!-- ===============================
+       RODAPÉ
+       =============================== -->
   <footer class="site-footer">
     <div class="container footer-grid">
       <span>© 2025 Varal dos Sonhos</span>
@@ -127,6 +151,40 @@
     </div>
   </footer>
 
+  <!-- Script principal -->
   <script src="js/cadastro.js"></script>
+
+  <!-- ===============================
+       INTEGRAÇÃO VIA CEP
+       =============================== -->
+  <script>
+  async function buscarEnderecoPorCEP() {
+    const cep = document.getElementById('cep').value.replace(/\D/g, '');
+
+    if (cep.length !== 8) {
+      alert('CEP inválido. Digite um CEP com 8 dígitos.');
+      return;
+    }
+
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+    try {
+      const resposta = await fetch(url);
+      const dados = await resposta.json();
+
+      if (dados.erro) {
+        alert('CEP não encontrado. Verifique e tente novamente.');
+        return;
+      }
+
+      // Preenche os campos automaticamente
+      document.getElementById('endereco').value = `${dados.logradouro || ''}, ${dados.bairro || ''}`;
+      document.getElementById('cidade').value = dados.localidade || '';
+    } catch (erro) {
+      console.error('Erro ao buscar CEP:', erro);
+      alert('Erro ao buscar endereço. Tente novamente.');
+    }
+  }
+  </script>
 </body>
 </html>
