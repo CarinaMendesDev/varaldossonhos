@@ -1,6 +1,7 @@
 // ===============================
 // 📘 Cadastro de Usuários — Varal dos Sonhos
 // ===============================
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formCadastro");
 
@@ -30,9 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     botao.textContent = "Enviando...";
 
     try {
-      const baseURL = window.location.hostname.includes("vercel.app")
-        ? ""
-        : "https://varaldossonhos-sp.vercel.app/cadastro.html";
+      // 🚀 Mesmo domínio, sem CORS
+      const baseURL = "";
 
       const resposta = await fetch(`${baseURL}/api/cadastro`, {
         method: "POST",

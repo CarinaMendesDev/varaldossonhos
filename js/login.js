@@ -1,3 +1,7 @@
+// ===============================
+// 💙 Login de Usuários — Varal dos Sonhos
+// ===============================
+
 document.getElementById("btnLogin").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value.trim();
@@ -12,11 +16,13 @@ document.getElementById("btnLogin").addEventListener("click", async () => {
   }
 
   try {
-    const baseURL = window.location.hostname.includes("vercel.app") ? "" : "https://varaldossonhos-sp.vercel.app";
+    // 🚀 Quando hospedado na Vercel, o domínio é o mesmo
+    const baseURL = "";
+
     const resposta = await fetch(`${baseURL}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, senha })
+      body: JSON.stringify({ email, senha }),
     });
 
     const dados = await resposta.json();
@@ -25,10 +31,12 @@ document.getElementById("btnLogin").addEventListener("click", async () => {
       mensagem.textContent = "✅ Login realizado com sucesso!";
       mensagem.style.color = "green";
 
+      // Salva no localStorage para usar nas próximas telas
       localStorage.setItem("usuario", JSON.stringify(dados.usuario));
 
       const tipo = dados.usuario.tipo_usuario?.toLowerCase();
 
+      // Redireciona conforme o tipo de usuário
       if (tipo === "doador") {
         window.location.href = "cartinhas.html";
       } else if (tipo === "voluntario") {
