@@ -1,6 +1,5 @@
 // ===============================
 // 📘 Cadastro de Usuários — Varal dos Sonhos
-// Integração com API hospedada no Vercel (Airtable)
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,14 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Coleta dos dados do formulário
     const nome = document.getElementById("nome").value.trim();
     const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value.trim();
     const tipoUsuario = document.getElementById("tipo_usuario").value;
     const cidade = document.getElementById("cidade").value.trim();
 
-    // Validação simples
     if (!nome || !email || !senha || !tipoUsuario) {
       alert("⚠️ Por favor, preencha todos os campos obrigatórios.");
       return;
@@ -33,10 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
     botao.textContent = "Enviando...";
 
     try {
-      // 🔗 Detecta automaticamente se está no Vercel ou local
       const baseURL = window.location.hostname.includes("vercel.app")
-        ? "" // se já estiver no domínio da Vercel
-        : "https://varaldossonhos-sp.vercel.app"; // para testes locais
+        ? "" // produção
+        : "https://varaldossonhos-sp.vercel.app"; // desenvolvimento local
 
       const resposta = await fetch(`${baseURL}/api/cadastro`, {
         method: "POST",
@@ -47,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await resposta.json();
 
       if (resposta.ok) {
-        alert("🎉 Cadastro realizado com sucesso! Faça login para continuar.");
+        alert("🎉 Cadastro realizado com sucesso!");
         form.reset();
         window.location.href = "login.html";
       } else {

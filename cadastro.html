@@ -8,12 +8,97 @@
   <!-- 🌐 Fontes e Estilos -->
   <link rel="stylesheet" href="css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* === Ajuste de responsividade e centralização === */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #E6F0FF 0%, #F8F9FF 100%);
+      margin: 0;
+    }
+
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .form-section {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      max-width: 420px;
+      width: 100%;
+      padding: 2rem 2.5rem;
+    }
+
+    .form-section h2 {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      color: #2a4d9b;
+    }
+
+    .form-section p {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+
+    form label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #333;
+    }
+
+    form input, form select {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: #2a4d9b;
+      color: #fff;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: #1f3e7b;
+    }
+
+    .text-center {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    /* 📱 Mobile-friendly */
+    @media (max-width: 480px) {
+      .form-section {
+        padding: 1.5rem;
+        max-width: 95%;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <!-- ========================= -->
-  <!-- Cabeçalho fixo -->
-  <!-- ========================= -->
   <header class="site-header">
     <div class="container nav">
       <a class="brand" href="index.html"><span class="brand-badge">Varal Virtual</span></a>
@@ -26,11 +111,6 @@
     </div>
   </header>
 
-  <div class="header-spacer" aria-hidden="true"></div>
-
-  <!-- ========================= -->
-  <!-- Formulário de Cadastro -->
-  <!-- ========================= -->
   <main class="container form-container">
     <section class="form-section card">
       <h2>💙 Crie sua conta</h2>
@@ -57,16 +137,13 @@
         <label for="cidade">Cidade</label>
         <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo" required>
 
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <button type="submit" class="btn-primary">Cadastrar</button>
       </form>
 
       <p class="text-center">Já possui conta? <a href="login.html">Entrar</a></p>
     </section>
   </main>
 
-  <!-- ========================= -->
-  <!-- Rodapé -->
-  <!-- ========================= -->
   <footer class="site-footer">
     <div class="container footer-grid">
       <span>© 2025 Varal dos Sonhos</span>
@@ -74,9 +151,6 @@
     </div>
   </footer>
 
-  <!-- ========================= -->
-  <!-- Scripts -->
-  <!-- ========================= -->
   <script src="js/cadastro.js"></script>
 </body>
 </html>

@@ -1,3 +1,6 @@
+// ===============================
+// 📘 API de Cadastro - Varal dos Sonhos
+// ===============================
 import Airtable from "airtable";
 
 export default async function handler(req, res) {
@@ -11,14 +14,17 @@ export default async function handler(req, res) {
 
     if (!apiKey || !baseId) {
       console.error("❌ Variáveis de ambiente ausentes:", { apiKey, baseId });
-      return res.status(500).json({ error: "Variáveis de ambiente ausentes." });
+      return res.status(500).json({ error: "Configuração do servidor incorreta." });
     }
 
-    console.log("🔑 Conectando ao Airtable com base:", baseId);
     const base = new Airtable({ apiKey }).base(baseId);
 
     const { nome, email, senha, tipoUsuario, cidade } = req.body;
     console.log("📨 Dados recebidos:", { nome, email, tipoUsuario, cidade });
+
+    if (!nome || !email || !senha || !tipoUsuario) {
+      return res.status(400).json({ error: "Campos obrigatórios ausentes." });
+    }
 
     // 🔍 Verifica se o e-mail já existe
     const existentes = await base("Usuarios")
@@ -26,7 +32,7 @@ export default async function handler(req, res) {
       .firstPage();
 
     if (existentes.length > 0) {
-      console.log("⚠️ E-mail já existente:", email);
+      console.warn("⚠️ E-mail já existente:", email);
       return res.status(409).json({ error: "E-mail já cadastrado." });
     }
 
@@ -46,7 +52,7 @@ export default async function handler(req, res) {
       },
     ]);
 
-    console.log("✅ Novo usuário criado:", novo[0].id);
+    console.log("✅ Usuário criado com sucesso:", novo[0].id);
     res.status(200).json({ message: "Usuário cadastrado com sucesso!" });
   } catch (erro) {
     console.error("❌ Erro detalhado:", erro);
