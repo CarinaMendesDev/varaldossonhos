@@ -1,98 +1,168 @@
-.varal-container {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  gap: 1.5rem;
-  padding: 2rem;
-  justify-content: center;
-  scrollbar-width: thin;
+/* ===== ESTILO GERAL ===== */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(180deg, #E6F0FF 0%, #F8F9FF 100%);
+  color: #2c3e50;
+  margin: 0;
+  padding: 0;
 }
 
-.varal-container::-webkit-scrollbar {
-  height: 8px;
-}
-
-.varal-container::-webkit-scrollbar-thumb {
-  background-color: #9dbbf8;
-  border-radius: 10px;
-}
-
-.cartinha {
+/* ===== CABEÇALHO ===== */
+.header {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 240px;
-  padding: 1rem;
-  text-align: center;
-  transition: transform 0.3s ease-in-out;
-  position: relative;
-}
-
-.cartinha:hover {
-  transform: rotate(1deg) scale(1.03);
-}
-
-.cartinha img.cartinha-foto {
-  width: 100%;
-  border-radius: 8px;
-  cursor: zoom-in;
-}
-
-.cartinha img.personagem {
-  width: 80px;
-  height: 80px;
-  margin-top: 10px;
-  border-radius: 50%;
-}
-
-.prendedor {
-  width: 30px;
-  position: absolute;
-  top: -20px;
-  left: calc(50% - 15px);
-}
-
-.cartinha-info {
-  margin-top: 0.5rem;
-  font-size: 0.95rem;
-}
-
-.cartinha-info strong {
-  color: #1e3a8a;
-}
-
-.botao-adotar {
-  background-color: #1e3a8a;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.botao-adotar:hover {
-  background-color: #2563eb;
-}
-
-/* Zoom */
-#zoomOverlay {
-  display: none;
-  position: fixed;
+  border-bottom: 1px solid #dce3f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+  z-index: 10;
 }
 
-#zoomOverlay img {
-  max-width: 80%;
-  max-height: 80%;
+.container-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1150px;
+  margin: auto;
+  padding: 10px 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  height: 50px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  margin: 0 10px;
+  transition: color 0.3s ease;
+}
+
+.nav a:hover {
+  color: #004aad;
+}
+
+.nav .active {
+  border-bottom: 2px solid #004aad;
+}
+
+.usuario-logado {
+  background: #eaf3ff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #004aad;
+}
+
+/* ===== CONTEÚDO PRINCIPAL ===== */
+.container {
+  max-width: 1100px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  text-align: center;
+}
+
+.container h1 {
+  color: #004aad;
+  margin-bottom: 10px;
+}
+
+.subtitulo {
+  color: #5c6b80;
+  margin-bottom: 40px;
+}
+
+/* ===== GRID DE CARTINHAS ===== */
+.cartinhas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  justify-items: center;
+}
+
+/* ===== CARTINHA ===== */
+.cartinha-item {
+  background: #f9fbff;
+  border: 1px solid #dce3f0;
+  border-radius: 16px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.07);
+  width: 250px;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.cartinha-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== IMAGENS ===== */
+.cartinha-foto {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  height: 180px;
+}
+
+.pregador {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35px;
+}
+
+.cartinha-avatar {
+  width: 60px;
+  margin-top: 12px;
+}
+
+/* ===== TEXTOS ===== */
+.cartinha-item h3 {
+  margin: 10px 0 5px 0;
+  color: #004aad;
+}
+
+.cartinha-item p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #34495e;
+}
+
+/* ===== BOTÃO ===== */
+.adotar-btn {
+  background: #007bff;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  margin-top: 10px;
   border-radius: 10px;
-  cursor: zoom-out;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.adotar-btn:hover {
+  background: #005ecb;
+}
+
+/* ===== RODAPÉ ===== */
+.footer {
+  background: #f1f5ff;
+  border-top: 1px solid #dce3f0;
+  text-align: center;
+  padding: 15px;
+  color: #5c6b80;
+  font-size: 14px;
 }
