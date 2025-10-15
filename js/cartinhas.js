@@ -1,84 +1,60 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const cartinhasContainer = document.getElementById("cartinhasContainer");
-  const usuarioLogado = document.getElementById("usuarioLogado");
+  const lista = document.getElementById("cartinhasList");
   const loginLink = document.getElementById("loginLink");
 
-  // ===== MOSTRAR USUÁRIO LOGADO NO CABEÇALHO =====
+  // ====== Mostra nome do usuário logado ======
   const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
-  if (usuario) {
-    usuarioLogado.textContent = `Olá, ${usuario.nome}!`;
-    usuarioLogado.style.display = "inline-block";
-    loginLink.style.display = "none";
+  if (usuario && usuario.nome) {
+    loginLink.textContent = usuario.nome.split(" ")[0];
+    loginLink.href = "#";
+    loginLink.classList.add("usuario-logado");
   }
 
-  // ===== FUNÇÃO PARA CARREGAR CARTINHAS =====
-  async function carregarCartinhas() {
-    try {
-      const resposta = await fetch("/api/cartinhas");
-      if (!resposta.ok) {
-        throw new Error(`Erro ao buscar cartinhas: ${resposta.statusText}`);
-      }
+  // ====== Carrega as cartinhas ======
+  try {
+    const resposta = await fetch("/api/cartinhas");
+    if (!resposta.ok) throw new Error("Erro ao carregar cartinhas");
+    const cartinhas = await resposta.json();
 
-      const cartinhas = await resposta.json();
-      cartinhasContainer.innerHTML = "";
+    cartinhas.forEach((c) => {
+      const nome = c.fields.primeiro_nome || "Criança";
+      const idade = c.fields.idade || "—";
+      const sonho = c.fields.sonho || "Não informado";
+      const irmaos = c.fields.irmaos || "Não informado";
+      const imagem = c.fields.imagem_cartinha?.[0]?.url || "imagens/placeholder.png";
+      const sexo = c.fields.sexo?.toLowerCase() || "menino";
 
-      if (cartinhas.length === 0) {
-        cartinhasContainer.innerHTML = `<p>Nenhuma cartinha disponível no momento 💌</p>`;
-        return;
-      }
+      const avatar = sexo === "menina"
+        ? "imagens/menina.png"
+        : "imagens/menino.png";
 
-      cartinhas.forEach((cartinha) => {
-        const item = document.createElement("div");
-        item.classList.add("cartinha-item");
-
-        const foto = cartinha.imagem_cartinha?.[0]?.url || "imagens/cartinha.png";
-        const sexo = cartinha.sexo === "Feminino" ? "imagens/avatar-menina.png" : "imagens/avatar-menino.png";
-
-        item.innerHTML = `
-          <img src="${foto}" alt="Cartinha de ${cartinha.primeiro_nome}" class="cartinha-foto" />
-          <img src="imagens/pregador.png" class="pregador" alt="Pregador" />
-          <img src="${sexo}" alt="Avatar da criança" class="cartinha-avatar" />
-          <h3>${cartinha.primeiro_nome}</h3>
-          <p>${cartinha.idade} anos</p>
-          <p><strong>Sonho:</strong> ${cartinha.sonho || "Não informado"}</p>
-          <p><strong>Irmãos:</strong> ${cartinha.irmaos || "Não informado"}</p>
-          <button class="adotar-btn" data-id="${cartinha.id_cartinha}">Adotar 💙</button>
-        `;
-
-        cartinhasContainer.appendChild(item);
-      });
-
-      // ===== EVENTO PARA ADICIONAR AO CARRINHO =====
-      document.querySelectorAll(".adotar-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          if (!usuario) {
-            alert("Você precisa estar logado para adotar uma cartinha 💙");
-            window.location.href = "login.html";
-            return;
-          }
-
-          const idCartinha = e.target.getAttribute("data-id");
-          adicionarAoCarrinho(idCartinha);
-        });
-      });
-    } catch (error) {
-      console.error("Erro ao carregar cartinhas:", error);
-      cartinhasContainer.innerHTML = `<p>Erro ao carregar as cartinhas 😢</p>`;
-    }
+      const item = document.createElement("div");
+      item.className = "cartinha-item";
+      item.innerHTML = `
+        <img src="imagens/pregador.png" alt="Pregador" class="pregador" />
+        <img src="${imagem}" alt="Cartinha de ${nome}" class="cartinha-foto" />
+        <img src="${avatar}" alt="Avatar da criança" class="cartinha-avatar" />
+        <h3>${nome}</h3>
+        <p>${idade} anos</p>
+        <p><strong>Sonho:</strong> ${sonho}</p>
+        <p><strong>Irmãos:</strong> ${irmaos}</p>
+        <button class="adotar-btn">Adotar 💙</button>
+      `;
+      lista.appendChild(item);
+    });
+  } catch (err) {
+    console.error("Erro ao carregar cartinhas:", err);
   }
 
-  // ===== FUNÇÃO PARA ADICIONAR CARTINHA AO CARRINHO =====
-  function adicionarAoCarrinho(idCartinha) {
-    let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    if (carrinho.includes(idCartinha)) {
-      alert("Essa cartinha já está no seu carrinho 💙");
-      return;
-    }
-    carrinho.push(idCartinha);
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-    alert("Cartinha adicionada ao carrinho com sucesso! 💌");
-  }
+  // ====== Carrossel ======
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
 
-  // ===== EXECUTA =====
-  carregarCartinhas();
+  prevBtn.addEventListener("click", () => {
+    lista.scrollBy({ left: -300, behavior: "smooth" });
+  });
+
+  nextBtn.addEventListener("click", () => {
+    lista.scrollBy({ left: 300, behavior: "smooth" });
+  });
 });
