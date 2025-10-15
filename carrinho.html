@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carrinho | Varal dos Sonhos</title>
+  <link rel="stylesheet" href="css/carrinho.css" />
+  <script defer src="js/carrinho.js"></script>
+</head>
+<body>
+
+  <!-- ===== CABEÇALHO PADRÃO ===== -->
+  <header class="header">
+    <div class="container-header">
+      <div class="logo">
+        <img src="imagens/logo.png" alt="Logo" class="logo-img" />
+        <h2>Varal dos Sonhos</h2>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Início</a>
+        <a href="cartinhas.html">Varal Virtual</a>
+        <a href="carrinho.html" class="active">Carrinho</a>
+        <a href="pontos.html">Pontos de Coleta</a>
+        <a href="cadastro.html">Cadastro</a>
+        <a href="login.html" id="loginLink">Login</a>
+        <span id="usuarioLogado" class="usuario-logado" style="display:none;"></span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== CONTEÚDO PRINCIPAL ===== -->
+  <main class="container">
+    <h1>Meu Carrinho</h1>
+    <div id="carrinhoLista" class="carrinho-lista"></div>
+
+    <div class="acoes">
+      <button class="btn limpar" id="btnLimpar">🗑️ Limpar Carrinho</button>
+      <button class="btn confirmar" id="btnConfirmar">✅ Confirmar Adoção</button>
+    </div>
+  </main>
+
+  <!-- ===== RODAPÉ PADRÃO ===== -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2025 Varal dos Sonhos</p>
+      <p>Desenvolvido com amor 💙</p>
+    </div>
+  </footer>
+
+</body>
+</html>
