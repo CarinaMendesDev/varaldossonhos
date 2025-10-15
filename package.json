@@ -1,0 +1,16 @@
+{
+  "name": "varal-dos-sonhos-api",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "airtable": "^0.12.2",
+    "dotenv": "^16.4.5",
+    "emailjs": "^4.0.3"
+  },
+  "scripts": {
+    "start": "node api/testarEnvioEmail.js"
+  }
+}

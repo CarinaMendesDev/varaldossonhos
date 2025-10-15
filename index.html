@@ -4,17 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Fantástica Fábrica de Sonhos | Varal dos Sonhos</title>
+
+  <!-- 🌐 Fontes e estilos -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
 
-  <!-- Header fixo -->
-  <header class="site-header">
+<body>
+  <!-- ========================= -->
+  <!-- Cabeçalho fixo do site -->
+  <!-- ========================= -->
+  <header class="site-header" role="banner">
     <div class="container nav">
-      <a class="brand" href="index.html" aria-label="Página inicial">
+      <a class="brand" href="index.html" aria-label="Página inicial Varal dos Sonhos">
         <span class="brand-badge">Varal Virtual</span>
       </a>
 
@@ -23,45 +27,43 @@
         <a class="menu-link" href="cartinhas.html">Varal Virtual</a>
         <a class="menu-link" href="carrinho.html">Carrinho</a>
         <a class="menu-link" href="pontos-de-coleta.html">Pontos de Coleta</a>
+        <a class="btn btn-outline" href="cadastro.html">Cadastro</a>
         <a class="btn btn-outline" href="login.html">Login</a>
       </nav>
     </div>
   </header>
 
-  <!-- Espaço para compensar o header fixo -->
   <div class="header-spacer" aria-hidden="true"></div>
 
-  <!-- Hero -->
-  <main>
+  <!-- ========================= -->
+  <!-- Seção principal / Hero -->
+  <!-- ========================= -->
+  <main role="main">
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <h1 class="title">Fantástica <span class="highlight">Fábrica de Sonhos</span></h1>
+          <img src="./imagens/escrita-sem-fundo.png" alt="Logotipo Varal dos Sonhos" class="cloud-logo" />
+
           <p class="subtitle">
             Cada cartinha é uma janela para o sonho de uma criança. <br />
             Adote com responsabilidade e ajude a transformar histórias!
           </p>
 
           <div class="cta-group">
-            <a class="btn btn-primary btn-lg" href="cartinhas.html">
-              Quero Adotar um Sonho
-            </a>
-            <a class="btn btn-soft" href="como-funciona.html">
-              Como funciona
-            </a>
+            <a class="btn btn-primary btn-lg" href="cartinhas.html">Quero Adotar um Sonho</a>
+            <a class="btn btn-soft" href="como-funciona.html">Como funciona</a>
           </div>
 
-          <ul class="hero-list" aria-label="Benefícios">
+          <ul class="hero-list" aria-label="Benefícios do Varal dos Sonhos">
             <li>Processo simples e transparente</li>
             <li>Acompanhamento por e-mail e WhatsApp</li>
-            <li>Pontos de coleta próximos de você</li>
           </ul>
         </div>
 
-        <div class="hero-art">
-          <!-- Espaço para futura ilustração ou banner (opcional) -->
-          <div class="cloud-card" role="img" aria-label="Ilustração de nuvem com brinquedos">
-            <div class="cloud">Varal dos Sonhos</div>
+        <!-- ☁️ Nuvem com logo -->
+        <div class="hero-art" role="img" aria-label="Ilustração de nuvem com logotipo e brinquedos">
+          <div class="cloud-card">
+            <img src="./imagens/logo-sem-fundo.png" alt="Logotipo Varal dos Sonhos" class="cloud-logo" />
             <div class="line"></div>
             <div class="toys" aria-hidden="true">🧸 🐨 🚗 🦖 🧒</div>
           </div>
@@ -69,19 +71,48 @@
       </div>
     </section>
 
-    <!-- Seção de avisos/eventos (placeholder) -->
-    <section class="strip">
+    <!-- ========================= -->
+    <!-- Seção de eventos -->
+    <!-- ========================= -->
+    <section class="strip" aria-labelledby="eventos-titulo">
       <div class="container strip-grid">
         <div>
-          <h2 class="h2">Próximos eventos</h2>
-          <p>Campanhas itinerantes em escolas de São Paulo — a cada 2 meses.</p>
+          <h2 class="h2" id="eventos-titulo">Próximos eventos</h2>
+          <p>Campanhas itinerantes em escolas de São Paulo.</p>
         </div>
-        <a class="btn btn-outline" href="eventos.html">Ver agenda</a>
+        <a class="btn btn-outline btn-agenda" href="eventos.html">Ver agenda</a>
       </div>
     </section>
 
-    <!-- Seção de destaque -->
-    <section class="features">
+    <!-- ========================= -->
+    <!-- Seção de destaque (carrossel) -->
+    <!-- ========================= -->
+    <section class="features" aria-label="Conheça o projeto">
+      <!-- 🎠 Carrossel de fotos -->
+      <div class="carousel" role="region" aria-roledescription="carrossel de imagens">
+        <ul class="carousel-track" id="carouselTrack" aria-live="polite">
+          <li class="carousel-slide"><img src="./imagens/1.png" alt="Ação 1 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/2.png" alt="Ação 2 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/3.png" alt="Ação 3 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/4.png" alt="Ação 4 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/5.png" alt="Ação 5 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/6.png" alt="Ação 6 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/7.png" alt="Ação 7 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/8.png" alt="Ação 8 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/9.png" alt="Ação 9 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/10.png" alt="Ação 10 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/11.png" alt="Ação 11 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/12.png" alt="Ação 12 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/13.png" alt="Ação 13 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/14.png" alt="Ação 14 do projeto" /></li>
+          <li class="carousel-slide"><img src="./imagens/15.png" alt="Ação 15 do projeto" /></li>
+        </ul>
+
+        <button class="carousel-btn prev" id="carouselPrev" aria-label="Foto anterior">‹</button>
+        <button class="carousel-btn next" id="carouselNext" aria-label="Próxima foto">›</button>
+      </div>
+
+      <!-- Cards informativos -->
       <div class="container features-grid">
         <article class="card">
           <h3>Transparência</h3>
@@ -99,28 +130,29 @@
     </section>
   </main>
 
-  <!-- Rodapé fixo -->
-  <footer class="site-footer">
+  <!-- ========================= -->
+  <!-- Rodapé -->
+  <!-- ========================= -->
+  <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <span>© 2025 Varal dos Sonhos</span>
       <span>Desenvolvido com amor 💙</span>
     </div>
   </footer>
 
-  <!-- Espaço para compensar o footer fixo -->
   <div class="footer-spacer" aria-hidden="true"></div>
 
-  <!-- Assistente Virtual: Cloudinho -->
+  <!-- ========================= -->
+  <!-- ☁️ Assistente Virtual Cloudinho -->
+  <!-- ========================= -->
   <button class="cloudinho-button" id="cloudinhoBtn" aria-label="Abrir assistente Cloudinho">
     <img src="./imagens/cloudinho.png" alt="Cloudinho, assistente virtual" />
   </button>
 
-    <!-- Balão fixo de boas-vindas -->
-  <div class="cloudinho-label">
+  <div class="cloudinho-label" id="cloudinhoLabel">
     ☁️ Oi! Eu sou o <strong>Cloudinho</strong><br>
     Seu assistente virtual! Clique em mim para ajuda 💙
   </div>
-
 
   <div class="cloudinho-bubble" id="cloudinhoBubble" role="dialog" aria-live="polite" aria-hidden="true">
     <p id="cloudinhoText">Oi! Eu sou o Cloudinho ☁️ Posso te ajudar a encontrar uma cartinha?</p>
@@ -130,45 +162,12 @@
     </div>
   </div>
 
-  <!-- JS mínimo para o Cloudinho -->
-  <script>
-    (function () {
-      const bubble = document.getElementById('cloudinhoBubble');
-      const btn = document.getElementById('cloudinhoBtn');
-      const text = document.getElementById('cloudinhoText');
-
-      const mensagens = [
-        "Oi! Eu sou o Cloudinho ☁️ Posso te ajudar a encontrar uma cartinha?",
-        "Sabia que você pode adotar mais de um sonho? 💙",
-        "Tem um ponto de coleta pertinho de você. Quer ver?",
-        "Dúvidas? Eu explico o passo a passo rapidinho!"
-      ];
-      let i = 0;
-
-      function toggleBubble() {
-        const open = bubble.getAttribute('aria-hidden') === 'false';
-        bubble.setAttribute('aria-hidden', open ? 'true' : 'false');
-      }
-
-      btn.addEventListener('click', toggleBubble);
-
-      bubble.addEventListener('click', (e) => {
-        if (e.target.dataset.action === 'adotar') {
-          window.location.href = 'cartinhas.html';
-        }
-        if (e.target.dataset.action === 'contato') {
-          window.location.href = 'contato.html';
-        }
-      });
-
-      // Rotaciona mensagens quando a bolha estiver visível
-      setInterval(() => {
-        if (bubble.getAttribute('aria-hidden') === 'false') {
-          i = (i + 1) % mensagens.length;
-          text.textContent = mensagens[i];
-        }
-      }, 5000);
-    })();
-  </script>
+  <!-- ========================= -->
+  <!-- Scripts -->
+  <!-- ========================= -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="js/notificacao.js"></script>
+  <script src="js/cloudinho.js"></script>
+  <script src="js/carrossel.js" type="module"></script>
 </body>
 </html>

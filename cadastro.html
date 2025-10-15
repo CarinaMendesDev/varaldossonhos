@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cadastro | Varal dos Sonhos 💙</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-badge">Varal Virtual</span></a>
+      <nav class="menu">
+        <a class="menu-link" href="index.html">Início</a>
+        <a class="menu-link" href="cartinhas.html">Varal Virtual</a>
+        <a class="menu-link" href="pontos-de-coleta.html">Pontos de Coleta</a>
+        <a class="btn btn-outline" href="login.html">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container form-container">
+    <section class="form-section">
+      <h2>💙 Crie sua conta</h2>
+      <p>Cadastre-se para participar da Fantástica Fábrica de Sonhos!</p>
+
+      <form id="formCadastro">
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
+
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" placeholder="Crie uma senha" required>
+
+        <label for="tipo_usuario">Tipo de Usuário</label>
+        <select id="tipo_usuario" name="tipo_usuario" required>
+          <option value="">Selecione...</option>
+          <option value="doador">🎁 Doador</option>
+          <option value="voluntario">🤝 Voluntário</option>
+          <option value="administrador_geral">🛠️ Administrador Geral</option>
+        </select>
+
+        <label for="cidade">Cidade</label>
+        <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo" required>
+
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+      </form>
+
+      <p class="text-center">Já possui conta? <a href="login.html">Entrar</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <span>© 2025 Varal dos Sonhos</span>
+      <span>Desenvolvido com amor 💙</span>
