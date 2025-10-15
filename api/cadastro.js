@@ -1,49 +1,55 @@
-// api/cadastro.js
 import Airtable from "airtable";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Método não permitido" });
+    return res.status(405).json({ error: "Método não permitido." });
   }
 
   try {
-    const { nome, email, senha, tipoUsuario, cidade } = req.body;
+    const apiKey = process.env.AIRTABLE_API_KEY;
+    const baseId = process.env.AIRTABLE_BASE_ID;
 
-    if (!nome || !email || !senha || !tipoUsuario) {
-      return res.status(400).json({ error: "Todos os campos são obrigatórios." });
+    if (!apiKey || !baseId) {
+      console.error("❌ Variáveis de ambiente ausentes:", { apiKey, baseId });
+      return res.status(500).json({ error: "Variáveis de ambiente ausentes." });
     }
 
-    // 🔑 Conecta com o Airtable usando variáveis do ambiente da Vercel
-    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
-      .base(process.env.AIRTABLE_BASE_ID);
+    console.log("🔑 Conectando ao Airtable com base:", baseId);
+    const base = new Airtable({ apiKey }).base(baseId);
 
-    // 🔍 Verifica se já existe e-mail cadastrado
+    const { nome, email, senha, tipoUsuario, cidade } = req.body;
+    console.log("📨 Dados recebidos:", { nome, email, tipoUsuario, cidade });
+
+    // 🔍 Verifica se o e-mail já existe
     const existentes = await base("Usuarios")
       .select({ filterByFormula: `{Email} = "${email}"` })
       .firstPage();
 
     if (existentes.length > 0) {
+      console.log("⚠️ E-mail já existente:", email);
       return res.status(409).json({ error: "E-mail já cadastrado." });
     }
 
-    // 🧱 Cria novo registro no Airtable
-    await base("Usuarios").create([
+    // 🔢 Cria registro
+    const novo = await base("Usuarios").create([
       {
         fields: {
+          id_usuario: `u${Date.now().toString().slice(-6)}`,
           Nome: nome,
           Email: email,
           Senha: senha,
-          Tipo: tipoUsuario,
-          Cidade: cidade || "São Paulo",
-          DataCadastro: new Date().toISOString().split("T")[0],
-          Status: "ativo",
+          tipo_usuario: tipoUsuario,
+          cidade: cidade || "São Paulo",
+          status: "ativo",
+          data_cadastro: new Date().toISOString().split("T")[0],
         },
       },
     ]);
 
+    console.log("✅ Novo usuário criado:", novo[0].id);
     res.status(200).json({ message: "Usuário cadastrado com sucesso!" });
   } catch (erro) {
-    console.error("❌ Erro ao cadastrar:", erro);
-    res.status(500).json({ error: "Erro ao conectar com o Airtable." });
+    console.error("❌ Erro detalhado:", erro);
+    res.status(500).json({ error: "Erro ao conectar com o Airtable.", detalhe: erro.message });
   }
 }
