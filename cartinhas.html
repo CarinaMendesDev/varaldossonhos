@@ -1,32 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Varal de Cartinhas 💌</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/cartinhas.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Varal Virtual - Fábrica de Sonhos</title>
+  <link rel="stylesheet" href="css/cartinhas.css" />
+  <link rel="icon" href="imagens/favicon.png" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="container nav">
-      <a href="index.html" class="brand"><span class="brand-badge">Varal Virtual</span></a>
-      <nav class="menu">
-        <a href="index.html" class="menu-link">Início</a>
-        <a href="cartinhas.html" class="menu-link ativo">Varal Virtual</a>
-        <a href="login.html" class="menu-link">Login</a>
+
+  <!-- ===== CABEÇALHO PADRÃO ===== -->
+  <header class="header">
+    <div class="container-header">
+      <div class="logo">
+        <img src="imagens/logo.png" alt="Logo" class="logo-img" />
+        <h2>Varal dos Sonhos</h2>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Início</a>
+        <a href="cartinhas.html" class="active">Varal Virtual</a>
+        <a href="carrinho.html">Carrinho</a>
+        <a href="pontos.html">Pontos de Coleta</a>
+        <a href="cadastro.html">Cadastro</a>
+        <a href="login.html" id="loginLink">Login</a>
+        <span id="usuarioLogado" class="usuario-logado" style="display:none;"></span>
       </nav>
     </div>
   </header>
 
+  <!-- ===== CONTEÚDO ===== -->
   <main class="container">
-    <h2>💙 Escolha uma cartinha para adotar</h2>
-    <section id="varal" class="varal-container"></section>
+    <h1>Varal Virtual 💌</h1>
+    <p class="subtitulo">Escolha uma cartinha e adote um sonho 💙</p>
+
+    <div id="cartinhasContainer" class="cartinhas-grid">
+      <p>Carregando cartinhas...</p>
+    </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <span>© 2025 Varal dos Sonhos</span>
+  <!-- ===== RODAPÉ PADRÃO ===== -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2025 Varal dos Sonhos</p>
+      <p>Desenvolvido com amor 💙</p>
     </div>
   </footer>
 
