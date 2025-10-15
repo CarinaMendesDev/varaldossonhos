@@ -17,11 +17,11 @@ export default async function handler(req, res) {
     console.log("🔑 Conectando ao Airtable com base:", baseId);
     const base = new Airtable({ apiKey }).base(baseId);
 
-    const { nome, email, senha, tipoUsuario, cidade } = req.body;
-    console.log("📨 Dados recebidos:", { nome, email, tipoUsuario, cidade });
+    const { nome, email, telefone, cidade, tipo_usuario, senha } = req.body;
+    console.log("📨 Dados recebidos:", { nome, email, telefone, cidade, tipo_usuario, senha });
 
     // 🔍 Verifica se o e-mail já existe
-    const existentes = await base("Usuarios")
+    const existentes = await base("usuario")
       .select({ filterByFormula: `{email} = "${email}"` })
       .firstPage();
 
@@ -31,15 +31,16 @@ export default async function handler(req, res) {
     }
 
     // 🔢 Cria registro
-    const novo = await base("Usuarios").create([
+    const novo = await base("usuario").create([
       {
         fields: {
           id_usuario: `u${Date.now().toString().slice(-6)}`,
           nome: nome,
           email: email,
-          senha: senha,
-          tipo_usuario: tipoUsuario,
+          telefone: telefone || "00000-0000",
           cidade: cidade || "São Paulo",
+          tipo_usuario: tipo_usuario,
+          senha: senha,
           status: "ativo",
           data_cadastro: new Date().toISOString().split("T")[0],
         },

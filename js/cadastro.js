@@ -14,11 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const nome = document.getElementById("nome").value.trim();
     const email = document.getElementById("email").value.trim();
-    const senha = document.getElementById("senha").value.trim();
-    const tipoUsuario = document.getElementById("tipo_usuario").value;
+    const telefone = document.getElementById("telefone").value.trim();
     const cidade = document.getElementById("cidade").value.trim();
+    const tipo_usuario = document.getElementById("tipo_usuario").value;
+    const senha = document.getElementById("senha").value.trim();
 
-    if (!nome || !email || !senha || !tipoUsuario) {
+    if (!nome || !email || !telefone || !cidade || !tipo_usuario || !senha) {
       alert("⚠️ Por favor, preencha todos os campos obrigatórios.");
       return;
     }
@@ -31,12 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const baseURL = window.location.hostname.includes("vercel.app")
         ? ""
-        : "https://varaldossonhos-sp.vercel.app";
+        : "https://varaldossonhos-sp.vercel.app/cadastro.html";
 
       const resposta = await fetch(`${baseURL}/api/cadastro`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, email, senha, tipoUsuario, cidade }),
+        body: JSON.stringify({ nome, email, telefone, cidade, tipo_usuario, senha }),
       });
 
       const data = await resposta.json();
