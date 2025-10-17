@@ -1,173 +1,92 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- ============================================================
+       💙 VARAL DOS SONHOS — Página Inicial
+       Projeto: Fantástica Fábrica de Sonhos
+       Equipe Varal dos Sonhos | Vercel + Airtable + .NET MAUI
+  ============================================================ -->
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fantástica Fábrica de Sonhos | Varal dos Sonhos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+        content="Fantástica Fábrica de Sonhos — plataforma solidária que conecta doadores e crianças através da adoção de cartinhas." />
+  <meta name="theme-color" content="#4A90E2" />
 
-  <!-- 🌐 Fontes e estilos -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css" />
+  <title>Fantástica Fábrica de Sonhos 💙</title>
+
+  <!-- 🌈 Estilos globais -->
+  <link rel="stylesheet" href="css/variaveis.css" />
+  <link rel="stylesheet" href="css/header-footer.css" />
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/cloudinho.css" />
+  <link rel="icon" href="imagens/favicon.png" type="image/png" />
 </head>
 
 <body>
-  <!-- ========================= -->
-  <!-- Cabeçalho fixo do site -->
-  <!-- ========================= -->
-  <header class="site-header" role="banner">
-    <div class="container nav">
-      <a class="brand" href="index.html" aria-label="Página inicial Varal dos Sonhos">
-        <span class="brand-badge">Varal Virtual</span>
-      </a>
+  <!-- ============================================================
+       🔝 Cabeçalho e Rodapé — carregados dinamicamente
+       via js/componentes.js → funções carregarComponentes() e atualizarLogin()
+  ============================================================ -->
+  <div id="header"></div>
 
-      <nav class="menu" aria-label="Menu principal">
-        <a class="menu-link" href="index.html">Início</a>
-        <a class="menu-link" href="cartinhas.html">Varal Virtual</a>
-        <a class="menu-link" href="carrinho.html">Carrinho</a>
-        <a class="menu-link" href="pontos-de-coleta.html">Pontos de Coleta</a>
-        <a class="btn btn-outline" href="cadastro.html">Cadastro</a>
-        <a class="btn btn-outline" href="login.html">Login</a>
-      </nav>
-    </div>
-  </header>
-
-  <div class="header-spacer" aria-hidden="true"></div>
-
-  <!-- ========================= -->
-  <!-- Seção principal / Hero -->
-  <!-- ========================= -->
-  <main role="main">
+  <!-- 🌤️ Hero principal -->
+  <main>
     <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <img src="./imagens/escrita-sem-fundo.png" alt="Logotipo Varal dos Sonhos" class="cloud-logo" />
-
-          <p class="subtitle">
-            Cada cartinha é uma janela para o sonho de uma criança. <br />
-            Adote com responsabilidade e ajude a transformar histórias!
+      <div class="container hero-flex">
+        <!-- 🔹 Lado esquerdo -->
+        <div class="hero-texto">
+          <img src="imagens/nuvem-sem-fundo (2).png" alt="Fantástica Fábrica de Sonhos" class="nuvem-flutuante" />
+          <h2 class="frase-sub">Adote com responsabilidade 💙</h2>
+          <p class="frase-base">
+            Cada cartinha que você lê é uma janela para o sonho de uma criança.
           </p>
 
           <div class="cta-group">
-            <a class="btn btn-primary btn-lg" href="cartinhas.html">Quero Adotar um Sonho</a>
-            <a class="btn btn-soft" href="como-funciona.html">Como funciona</a>
+            <a class="btn btn-primary" href="cartinhas.html">Quero Adotar um Sonho</a>
+            <a class="btn btn-outline" href="como-funciona.html">Como funciona</a>
           </div>
 
-          <ul class="hero-list" aria-label="Benefícios do Varal dos Sonhos">
+          <ul class="lista-beneficios">
             <li>Processo simples e transparente</li>
             <li>Acompanhamento por e-mail e WhatsApp</li>
           </ul>
         </div>
 
-        <!-- ☁️ Nuvem com logo -->
-        <div class="hero-art" role="img" aria-label="Ilustração de nuvem com logotipo e brinquedos">
-          <div class="cloud-card">
-            <img src="./imagens/logo-sem-fundo.png" alt="Logotipo Varal dos Sonhos" class="cloud-logo" />
-            <div class="line"></div>
-            <div class="toys" aria-hidden="true">🧸 🐨 🚗 🦖 🧒</div>
+        <!-- 🔹 Lado direito: carrossel -->
+        <div class="hero-carrossel">
+          <h2 class="titulo-carrossel">Momentos que inspiram ✨</h2>
+          <div class="carousel-container">
+            <button class="carousel-btn prev" id="carouselPrev">❮</button>
+            <ul class="carousel-track" id="carouselTrack">
+              <!-- imagens vindas dinamicamente da API /api/eventos -->
+            </ul>
+            <button class="carousel-btn next" id="carouselNext">❯</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ========================= -->
-    <!-- Seção de eventos -->
-    <!-- ========================= -->
-    <section class="strip" aria-labelledby="eventos-titulo">
+    <!-- 📅 Seção de eventos -->
+    <section class="strip eventos-strip">
       <div class="container strip-grid">
         <div>
-          <h2 class="h2" id="eventos-titulo">Próximos eventos</h2>
-          <p>Campanhas itinerantes em escolas de São Paulo.</p>
+          <h2>Próximos eventos</h2>
+          <p>Campanhas solidárias e ações com escolas — participe também!</p>
         </div>
-        <a class="btn btn-outline btn-agenda" href="eventos.html">Ver agenda</a>
-      </div>
-    </section>
-
-    <!-- ========================= -->
-    <!-- Seção de destaque (carrossel) -->
-    <!-- ========================= -->
-    <section class="features" aria-label="Conheça o projeto">
-      <!-- 🎠 Carrossel de fotos -->
-      <div class="carousel" role="region" aria-roledescription="carrossel de imagens">
-        <ul class="carousel-track" id="carouselTrack" aria-live="polite">
-          <li class="carousel-slide"><img src="./imagens/1.png" alt="Ação 1 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/2.png" alt="Ação 2 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/3.png" alt="Ação 3 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/4.png" alt="Ação 4 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/5.png" alt="Ação 5 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/6.png" alt="Ação 6 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/7.png" alt="Ação 7 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/8.png" alt="Ação 8 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/9.png" alt="Ação 9 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/10.png" alt="Ação 10 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/11.png" alt="Ação 11 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/12.png" alt="Ação 12 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/13.png" alt="Ação 13 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/14.png" alt="Ação 14 do projeto" /></li>
-          <li class="carousel-slide"><img src="./imagens/15.png" alt="Ação 15 do projeto" /></li>
-        </ul>
-
-        <button class="carousel-btn prev" id="carouselPrev" aria-label="Foto anterior">‹</button>
-        <button class="carousel-btn next" id="carouselNext" aria-label="Próxima foto">›</button>
-      </div>
-
-      <!-- Cards informativos -->
-      <div class="container features-grid">
-        <article class="card">
-          <h3>Transparência</h3>
-          <p>Status da adoção em tempo real e confirmação no ponto de coleta.</p>
-        </article>
-        <article class="card">
-          <h3>Acessibilidade</h3>
-          <p>Site responsivo, simples e leve. Funciona em qualquer dispositivo.</p>
-        </article>
-        <article class="card">
-          <h3>Conexão</h3>
-          <p>Integração com e-mail e WhatsApp para notificações importantes.</p>
-        </article>
+        <a class="btn btn-primary btn-agenda" href="eventos.html">Ver agenda completa</a>
       </div>
     </section>
   </main>
 
-  <!-- ========================= -->
-  <!-- Rodapé -->
-  <!-- ========================= -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="container footer-grid">
-      <span>© 2025 Varal dos Sonhos</span>
-      <span>Desenvolvido com amor 💙</span>
-    </div>
-  </footer>
+  <!-- 🔚 Rodapé dinâmico -->
+  <div id="footer"></div>
 
-  <div class="footer-spacer" aria-hidden="true"></div>
+  <!-- ☁️ Cloudinho — carregado automaticamente -->
+  <div id="cloudinho"></div>
 
-  <!-- ========================= -->
-  <!-- ☁️ Assistente Virtual Cloudinho -->
-  <!-- ========================= -->
-  <button class="cloudinho-button" id="cloudinhoBtn" aria-label="Abrir assistente Cloudinho">
-    <img src="./imagens/cloudinho.png" alt="Cloudinho, assistente virtual" />
-  </button>
-
-  <div class="cloudinho-label" id="cloudinhoLabel">
-    ☁️ Oi! Eu sou o <strong>Cloudinho</strong><br>
-    Seu assistente virtual! Clique em mim para ajuda 💙
-  </div>
-
-  <div class="cloudinho-bubble" id="cloudinhoBubble" role="dialog" aria-live="polite" aria-hidden="true">
-    <p id="cloudinhoText">Oi! Eu sou o Cloudinho ☁️ Posso te ajudar a encontrar uma cartinha?</p>
-    <div class="bubble-actions">
-      <button class="btn btn-soft" data-action="adotar">Quero adotar</button>
-      <button class="btn btn-outline" data-action="contato">Falar com a equipe</button>
-    </div>
-  </div>
-
-  <!-- ========================= -->
-  <!-- Scripts -->
-  <!-- ========================= -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script src="js/notificacao.js"></script>
-  <script src="js/cloudinho.js"></script>
-  <script src="js/carrossel.js" type="module"></script>
+  <!-- 📜 Scripts -->
+  <script type="module" src="js/componentes.js"></script>
+  <script type="module" src="js/index.js"></script>
+  <script type="module" src="js/cloudinho.js"></script>
 </body>
 </html>

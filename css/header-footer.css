@@ -1,0 +1,163 @@
+/* ============================================================
+ 💙 Fantástica Fábrica de Sonhos — Cabeçalho e Rodapé
+ Layout fixo, tipografia suave e harmonia visual
+ ============================================================ */
+
+/* ===============================
+   🔝 Cabeçalho fixo
+   =============================== */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: #ffffff;
+  border-bottom: 1px solid #e3ebff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(74, 144, 226, 0.08);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Container interno */
+.container.nav {
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ===== Marca (Varal Virtual) ===== */
+.brand-badge {
+  background: linear-gradient(135deg, #4a90e2, #6aa8ff);
+  color: #fff;
+  padding: 0.55rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+  transition: transform 0.2s ease;
+  text-decoration: none; /* 🚫 remove sublinhado */
+  display: inline-block;
+}
+.brand-badge:hover {
+  transform: scale(1.05);
+  text-decoration: none; /* garante que continue sem sublinhado */
+}
+
+/* ===== Menu principal ===== */
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #1a347d;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.menu a:hover {
+  color: #4a90e2;
+  transform: translateY(-1px);
+}
+
+/* ===== Botões ===== */
+.btn {
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.5rem 1.1rem;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-outline {
+  border: 1px solid #4a90e2;
+  color: #4a90e2;
+  background: transparent;
+}
+.btn-outline:hover {
+  background: #4a90e2;
+  color: #fff;
+  transform: scale(1.03);
+}
+
+/* ===== Espaçador ===== */
+.header-spacer {
+  height: 70px;
+}
+
+/* ===============================
+   🔚 Rodapé fixo
+   =============================== */
+.site-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #ffffff;
+  border-top: 1px solid #e3ebff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 -2px 10px rgba(74, 144, 226, 0.05);
+  z-index: 900;
+}
+
+/* ===== Grid do rodapé ===== */
+.footer-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 1200px;
+  font-size: 0.9rem;
+  color: #1a347d;
+}
+
+/* ===== Link do Instagram ===== */
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: 600;
+}
+.footer-social:hover {
+  color: #1a347d;
+  text-decoration: underline;
+}
+
+/* ===============================
+   📱 Responsividade
+   =============================== */
+@media (max-width: 768px) {
+  .menu {
+    gap: 14px;
+  }
+
+  .btn-outline {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .brand-badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .footer-grid {
+    flex-direction: column;
+    gap: 6px;
+  }
+}

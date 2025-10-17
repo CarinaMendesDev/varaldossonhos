@@ -1,68 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Varal Virtual | Varal dos Sonhos</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/cartinhas.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Varal Virtual 💙</title>
+  <link rel="stylesheet" href="cartinhas.css" />
 </head>
 
 <body>
-  <!-- ========================= -->
   <!-- Cabeçalho -->
-  <!-- ========================= -->
-  <header class="site-header" role="banner">
-    <div class="container nav">
-      <a class="brand" href="index.html" aria-label="Página inicial Varal dos Sonhos">
-        <span class="brand-badge">Varal Virtual</span>
-      </a>
-
-      <nav class="menu" aria-label="Menu principal">
-        <a class="menu-link" href="index.html">Início</a>
-        <a class="menu-link active" href="cartinhas.html">Varal Virtual</a>
-        <a class="menu-link" href="carrinho.html">Carrinho</a>
-        <a class="menu-link" href="pontos-de-coleta.html">Pontos de Coleta</a>
-        <a class="btn btn-outline" href="cadastro.html">Cadastro</a>
-        <a id="loginLink" class="btn btn-outline" href="login.html">Login</a>
-      </nav>
+  <header>
+    <div class="logo">
+      <button class="btn-logo">Varal Virtual</button>
     </div>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="cartinhas.html" class="active">Varal Virtual</a>
+      <a href="carrinho.html">Carrinho</a>
+      <a href="pontos-de-coleta.html">Pontos de Coleta</a>
+      <a href="cadastro.html">Cadastro</a>
+      <a id="loginLink" href="login.html">Login</a>
+    </nav>
   </header>
 
-  <div class="header-spacer"></div>
+  <!-- Conteúdo -->
+  <main>
+    <section class="varal-section">
+      <h1>Varal Virtual 💙</h1>
+      <p>Escolha uma cartinha e adote um sonho</p>
+      <div class="linha"></div>
 
-  <!-- ========================= -->
-  <!-- Conteúdo principal -->
-  <!-- ========================= -->
-  <main class="cartinhas-container">
-    <h1>Varal Virtual 💙</h1>
-    <p>Escolha uma cartinha e adote um sonho</p>
-
-    <div class="varal-linha"></div>
-
-    <div class="carousel-cartinhas">
-      <button class="carousel-btn prev" id="prevBtn">‹</button>
-
-      <div class="cartinhas-list" id="cartinhasList">
-        <!-- Cartinhas serão carregadas via JS -->
+      <!-- Carrossel -->
+      <div class="carrossel-container">
+        <button id="prevBtn" class="seta">❮</button>
+        <div id="cartinhasContainer" class="cartinhas-lista"></div>
+        <button id="nextBtn" class="seta">❯</button>
       </div>
-
-      <button class="carousel-btn next" id="nextBtn">›</button>
-    </div>
+    </section>
   </main>
 
-  <!-- ========================= -->
   <!-- Rodapé -->
-  <!-- ========================= -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="container footer-grid">
-      <span>© 2025 Varal dos Sonhos</span>
-      <span>Desenvolvido com amor 💙</span>
-    </div>
+  <footer>
+    <p>© 2025 Varal dos Sonhos</p>
+    <p>Desenvolvido com amor 💙</p>
   </footer>
 
-  <div class="footer-spacer"></div>
-
-  <script src="js/cartinhas.js"></script>
+  <script src="cartinhas.js"></script>
 </body>
 </html>

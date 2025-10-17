@@ -1,32 +1,71 @@
+// ============================================================
+// ☁️ VARAL DOS SONHOS — Cloudinho.js (versão final com IA gratuita)
+// Mascote flutuante + frases rotativas + respostas Airtable
+// ============================================================
+
 document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("cloudinhoBtn");
   const bubble = document.getElementById("cloudinhoBubble");
-  const label = document.getElementById("cloudinhoLabel");
+  const button = document.getElementById("cloudinhoBtn");
   const text = document.getElementById("cloudinhoText");
-  const botoes = document.querySelectorAll(".bubble-actions button");
+  const btnAdotar = document.getElementById("cloudAdotar");
+  const btnContato = document.getElementById("cloudContato");
 
-  // Mostrar mensagem inicial por 10s
-  setTimeout(() => {
-    label.style.opacity = "0";
-    label.style.transition = "opacity 1s ease";
-  }, 10000);
+  // ✨ Frases rotativas
+  const mensagens = [
+    "Oi! Eu sou o Cloudinho ☁️",
+    "Quer ajuda para adotar uma cartinha?",
+    "Cada cartinha é um sonho esperando por você 💙",
+    "Clique aqui para começar a espalhar sorrisos 🌈"
+  ];
+  let index = 0;
 
-  // Clique no Cloudinho → mostra/esconde balão
-  btn.addEventListener("click", () => {
-    const isHidden = bubble.getAttribute("aria-hidden") === "true";
-    bubble.setAttribute("aria-hidden", !isHidden);
-    bubble.style.display = isHidden ? "block" : "none";
+  function trocarMensagem() {
+    text.textContent = mensagens[index];
+    index = (index + 1) % mensagens.length;
+  }
+
+  // 💬 Alterna exibição automática do balão
+  function animarBubble() {
+    bubble.classList.add("visivel");
+    setTimeout(() => bubble.classList.remove("visivel"), 6000);
+  }
+
+  // Intervalos rotativos
+  setInterval(trocarMensagem, 5000);
+  setInterval(animarBubble, 15000);
+
+  // Mostra/oculta manualmente ao clicar no Cloudinho
+  button.addEventListener("click", () => {
+    bubble.classList.toggle("visivel");
   });
 
-  // Ações dos botões dentro do balão
-  botoes.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const acao = e.target.dataset.action;
-      if (acao === "adotar") {
-        text.innerText = "💌 Que legal! Vá até a aba 'Varal Virtual' para escolher uma cartinha.";
-      } else if (acao === "contato") {
-        text.innerText = "📩 Você pode nos mandar um e-mail ou falar pelo WhatsApp!";
-      }
-    });
+  // Ações rápidas (mantidas)
+  btnAdotar.addEventListener("click", () => {
+    enviarMensagemCloudinho("Como adotar uma cartinha?");
   });
+
+  btnContato.addEventListener("click", () => {
+    enviarMensagemCloudinho("Quero falar com a equipe.");
+  });
+
+  // ============================================================
+  // 🔗 Integração com API do Cloudinho (gratuita via Airtable KB)
+  // ============================================================
+
+  async function enviarMensagemCloudinho(mensagem) {
+    try {
+      text.textContent = "☁️ Pensando...";
+      const resposta = await fetch("/api/cloudinho.api.js", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensagem })
+      });
+      const data = await resposta.json();
+      text.textContent = data.resposta || "💭 Não encontrei nada sobre isso ainda.";
+      bubble.classList.add("visivel");
+    } catch (erro) {
+      console.error("Erro no Cloudinho:", erro);
+      text.textContent = "💙 Ops! Parece que perdi a conexão...";
+    }
+  }
 });

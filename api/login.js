@@ -1,58 +1,59 @@
-// /api/login.js
-import Airtable from "airtable";
-import dotenv from "dotenv";
-import path from "path";
+// ============================================================
+// 🔐 VARAL DOS SONHOS — api/login.js
+// Autenticação simples via Airtable
+// ============================================================
 
-dotenv.config({ path: path.resolve("./config/.env.local") });
+import Airtable from "airtable";
+import { ENV } from "../config/env.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Método não permitido." });
+    return res.status(405).json({ error: "Método não permitido" });
   }
 
   try {
-    const apiKey = process.env.AIRTABLE_API_KEY;
-    const baseId = process.env.AIRTABLE_BASE_ID;
-    const tableName = process.env.AIRTABLE_TABLE_NAME || "usuario";
-
-    if (!apiKey || !baseId) {
-      return res.status(500).json({ message: "Erro interno: variáveis de ambiente ausentes." });
-    }
-
     const { email, senha } = req.body;
+
     if (!email || !senha) {
-      return res.status(400).json({ message: "E-mail e senha são obrigatórios." });
+      return res.status(400).json({ error: "Email e senha são obrigatórios." });
     }
 
-    const base = new Airtable({ apiKey }).base(baseId);
+    // 🔑 Conexão com o Airtable
+    const base = new Airtable({ apiKey: ENV.AIRTABLE_API_KEY }).base(ENV.AIRTABLE_BASE_ID);
 
-    const registros = await base(tableName)
-      .select({ filterByFormula: `{email} = "${email}"` })
+    // 🔍 Busca usuário pelo e-mail
+    const registros = await base(ENV.AIRTABLE_TABLES.usuarios)
+      .select({
+        filterByFormula: `{email} = "${email}"`,
+        maxRecords: 1
+      })
       .firstPage();
 
     if (registros.length === 0) {
-      return res.status(404).json({ message: "Usuário não encontrado." });
+      return res.status(401).json({ error: "Usuário não encontrado." });
     }
 
     const usuario = registros[0].fields;
 
+    // 🔒 Validação de senha (apenas protótipo)
     if (usuario.senha !== senha) {
-      return res.status(401).json({ message: "Senha incorreta." });
+      return res.status(401).json({ error: "Senha incorreta." });
     }
 
-    // Retorna campos públicos
-    return res.status(200).json({
-      message: "Login realizado com sucesso!",
-      usuario: {
-        id_usuario: usuario.id_usuario,
-        nome: usuario.nome,
-        email: usuario.email,
-        tipo_usuario: usuario.tipo_usuario,
-        cidade: usuario.cidade
-      }
-    });
-  } catch (err) {
-    console.error("Erro no /api/login:", err);
-    return res.status(500).json({ message: "Erro no servidor.", detalhe: err.message });
+    // ✅ Monta objeto com os campos necessários
+    const usuarioLogado = {
+      id: registros[0].id,
+      nome: usuario.nome || "Usuário",
+      email: usuario.email,
+      tipo: usuario.tipo_usuario || "doador",
+      status: usuario.status || "ativo",
+      dataCadastro: usuario.data_cadastro
+    };
+
+    res.status(200).json({ success: true, usuario: usuarioLogado });
+
+  } catch (erro) {
+    console.error("Erro ao autenticar usuário:", erro);
+    res.status(500).json({ error: "Erro interno ao autenticar." });
   }
 }

@@ -1,0 +1,184 @@
+/* ============================================================
+   🌈 VARAL DOS SONHOS — Identidade Visual Oficial
+   Base: Fantástica Fábrica de Sonhos 💙
+   ------------------------------------------------------------
+   ➕ Inclua nas páginas principais:
+   <link rel="stylesheet" href="css/variaveis.css">
+   <link rel="stylesheet" href="css/header-footer.css">
+   <link rel="stylesheet" href="css/index.css">
+
+   O que esse arquivo faz:
+
+✅ Centraliza todas as cores, fontes, botões e padrões visuais.
+✅ Permite mudar o tema do site inteiro alterando só aqui.
+✅ É compatível com todos os navegadores modernos e com o build do Vercel.
+✅ Facilita o uso do mesmo estilo no .NET MAUI, se você importar as mesmas cores na app.
+✅ Mantém o padrão da marca “Fantástica Fábrica de Sonhos”:
+💙 Azul principal #4A8DFF, branco, sombras suaves e tipografia Questrial.
+   ============================================================ */
+
+/* ============================================================
+   🎀 Fontes Oficiais
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Questrial&family=Shadows+Into+Light+Two&display=swap');
+
+/* ============================================================
+   🎨 Paleta de Cores e Variáveis Globais
+   ============================================================ */
+:root {
+  /* 💙 Tons principais da marca */
+  --azul-claro:   #C7E3F5;
+  --azul-medio:   #4A90E2;
+  --azul-escuro:  #003366;
+
+  /* ⚪ Tons neutros */
+  --branco:       #FFFFFF;
+  --cinza-claro:  #F2F6FA;
+  --linha:        #D7E6F5;
+
+  /* ✨ Sombras e efeitos */
+  --sombra: 0 6px 20px rgba(0, 51, 102, 0.12);
+
+  /* 💬 Tipografia */
+  --fonte-titulo: 'Shadows Into Light Two', cursive;
+  --fonte-texto:  'Questrial', sans-serif;
+
+  /* 🧱 Layout */
+  --radius:    16px;
+  --radius-lg: 24px;
+
+  /* 🌈 Variáveis compatíveis com outros arquivos */
+  --brand-50:   #eef4ff;
+  --brand-100:  #dbe7ff;
+  --brand-200:  #c7d7ff;
+  --brand-300:  #a4bfff;
+  --brand-400:  #7ea4ff;
+  --brand-500:  var(--azul-medio);
+  --brand-600:  #305adb;
+  --brand-700:  var(--azul-escuro);
+  --brand-800:  #002855;
+  --line:       var(--linha);
+}
+
+/* ============================================================
+   ⚙️ Reset e Base Global
+   ============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--fonte-texto);
+  color: var(--azul-escuro);
+  background: linear-gradient(to bottom, var(--azul-claro) 0%, var(--branco) 85%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================================
+   🧾 Tipografia
+   ============================================================ */
+h1, h2, h3, h4 {
+  font-family: var(--fonte-titulo);
+  color: var(--azul-escuro);
+  letter-spacing: 0.5px;
+}
+
+p, li, a, span {
+  font-family: var(--fonte-texto);
+  color: var(--azul-escuro);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   💙 Botões e Interações
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+/* 🩵 Botão principal */
+.btn-primary {
+  background: var(--azul-medio);
+  color: var(--branco);
+  padding: 0.7rem 1.4rem;
+  box-shadow: var(--sombra);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--azul-escuro);
+  transform: translateY(-2px);
+}
+
+/* 💭 Botão contornado */
+.btn-outline {
+  border: 2px solid var(--azul-medio);
+  background: transparent;
+  color: var(--azul-escuro);
+  padding: 0.6rem 1.3rem;
+}
+
+.btn-outline:hover {
+  background: var(--azul-claro);
+  transform: translateY(-2px);
+}
+
+/* 🤍 Botão suave */
+.btn-soft {
+  background: var(--azul-claro);
+  color: var(--azul-escuro);
+  border: 1px solid var(--linha);
+}
+
+.btn-soft:hover {
+  background: var(--azul-medio);
+  color: var(--branco);
+}
+
+/* ============================================================
+   🩵 Estrutura de Cards e Containers
+   ============================================================ */
+.container {
+  width: min(1180px, 92%);
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--branco);
+  border: 1px solid var(--linha);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  padding: 1.4rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 51, 102, 0.18);
+}
+
+/* ============================================================
+   🧭 Responsividade
+   ============================================================ */
+@media (max-width: 980px) {
+  h1 { font-size: 1.6rem; }
+  .container { width: 94%; }
+}
+
+@media (max-width: 600px) {
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+}

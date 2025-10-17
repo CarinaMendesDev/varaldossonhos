@@ -1,0 +1,124 @@
+/* ============================================================
+ 💙 Pontos de Coleta — Varal dos Sonhos
+ ============================================================ */
+
+.hero-coleta {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #d9ecff 0%, #ffffff 100%);
+  text-align: center;
+  padding: 120px 20px 100px;
+}
+
+.logo-coleta {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.titulo-coleta {
+  font-family: var(--fonte-titulo);
+  color: #1a347d;
+  margin-bottom: 40px;
+}
+
+/* === Grid dos cards === */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+/* === Estilo do card === */
+.card-coleta {
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 240px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.card-coleta:hover {
+  transform: translateY(-5px);
+}
+
+/* === Pregador no topo === */
+.card-coleta::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 24px;
+  background: url("../imagens/pregador.png") no-repeat center/contain;
+}
+
+/* === Texto interno === */
+.card-coleta h3 {
+  font-size: 1.05rem;
+  color: #1a347d;
+  margin-bottom: 0.5rem;
+}
+
+.card-coleta p {
+  color: #333;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.card-coleta .btn-mapa {
+  margin-top: 0.6rem;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+.card-coleta .btn-mapa:hover {
+  background: #3378c5;
+}
+
+/* === Modal === */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  padding-top: 80px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 700px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close:hover {
+  color: #000;
+}
+
+/* === Responsivo === */
+@media (max-width: 768px) {
+  .logo-coleta { width: 160px; }
+  .card-coleta { width: 90%; }
+}
