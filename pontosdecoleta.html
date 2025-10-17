@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- ============================================================
+       💙 VARAL DOS SONHOS — Pontos de Coleta
+       - Carrega header/footer e cloudinho já existentes
+       - Renderiza cards vindos do Airtable com "pregador"
+       - Abre Google Maps em modal ao clicar "Ver no mapa"
+       - Compatível com Vercel (.api), .NET MAUI (webview) e Airtable
+     ============================================================ -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Locais de coleta de doações da Fantástica Fábrica de Sonhos 💙" />
-  <title>Pontos de Coleta 💙 | Fantástica Fábrica de Sonhos</title>
+  <meta name="description" content="Locais oficiais de coleta da Fantástica Fábrica de Sonhos." />
+  <title>Pontos de Coleta | Fantástica Fábrica de Sonhos</title>
 
-  <!-- 🌈 Estilos globais -->
+  <!-- 🎨 Estilos globais já usados no projeto -->
   <link rel="stylesheet" href="css/variaveis.css" />
   <link rel="stylesheet" href="css/header-footer.css" />
   <link rel="stylesheet" href="css/cloudinho.css" />
+
+  <!-- 🎨 Estilos desta tela -->
   <link rel="stylesheet" href="css/pontosdecoleta.css" />
 
   <link rel="icon" href="imagens/favicon.png" type="image/png" />
 </head>
 <body>
-
-  <!-- 🔝 Cabeçalho -->
+  <!-- 🔝 Cabeçalho fixo (mesma base do site) -->
   <header class="site-header" role="banner">
     <div class="container nav">
       <a class="brand" href="index.html" aria-label="Página inicial">
         <span class="brand-badge">Varal Virtual</span>
       </a>
       <nav class="menu" aria-label="Menu principal">
+        <!-- ✅ certifique-se de que na HOME o link aponta para **pontosdecoleta.html** exatamente -->
         <a href="index.html">Início</a>
         <a href="cartinhas.html">Varal Virtual</a>
         <a href="carrinho.html">Carrinho</a>
@@ -33,44 +42,55 @@
     </div>
   </header>
 
-  <!-- ✨ Hero com logo -->
+  <!-- 🌤️ Área principal -->
   <main>
     <section class="hero-coleta">
       <div class="container">
-        <img src="./imagens/logo-sem-fundo.png" alt="Fantástica Fábrica de Sonhos" class="logo-coleta" />
+        <!-- 🔄 logo ajustado para o caminho que você informou -->
+        <img src="./imagens/logo-sem-fundo.png"
+             alt="Fantástica Fábrica de Sonhos"
+             class="logo-coleta" />
+
         <h2 class="titulo-coleta">Pontos de Coleta</h2>
-        <div id="cardsContainer" class="cards-grid">
-          <!-- 🧩 Cards serão carregados dinamicamente -->
+
+        <!-- 🧵 “corda do varal” (apenas um detalhe visual) -->
+        <div class="corda-varal" aria-hidden="true"></div>
+
+        <!-- 🧩 os cards entram aqui via JS -->
+        <div id="cardsContainer" class="cards-grid" aria-live="polite">
+          <div class="placeholder">Carregando pontos…</div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- 🔚 Rodapé -->
+  <!-- 🔚 Rodapé fixo -->
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <span>© 2025 Fantástica Fábrica de Sonhos</span>
-      <a href="https://instagram.com/varaldossonhos" class="footer-social" target="_blank">Nos siga no Instagram 💫</a>
+      <a href="https://instagram.com/varaldossonhos" class="footer-social" target="_blank" rel="noopener noreferrer">
+        Nos siga no Instagram 💫
+      </a>
     </div>
   </footer>
 
-  <!-- ☁️ Cloudinho -->
+  <!-- ☁️ Cloudinho (já estilizado por cloudinho.css) -->
   <button id="cloudinhoBtn" class="cloudinho-button" aria-label="Abrir assistente Cloudinho">
     <img src="imagens/cloudinho.png" alt="Cloudinho mascote" />
   </button>
-  <div class="cloudinho-bubble" id="cloudinhoBubble" aria-hidden="true">
-    <p id="cloudinhoText">Oi! Eu sou o Cloudinho ☁️ Quer ver onde entregar suas doações?</p>
+  <div class="cloudinho-bubble" id="cloudinhoBubble" aria-hidden="true" role="dialog" aria-label="Assistente Cloudinho">
+    <p id="cloudinhoText">Oi! Eu sou o Cloudinho ☁️ Quer ver o ponto de coleta mais perto?</p>
     <div class="bubble-actions">
-      <button class="btn btn-soft" id="cloudAdotar">Ver pontos</button>
+      <button class="btn btn-soft" id="cloudVerPontos">Ver pontos</button>
       <button class="btn btn-outline" id="cloudContato">Falar com a equipe</button>
     </div>
   </div>
 
-  <!-- 🗺️ Modal do Google Maps -->
-  <div id="mapModal" class="modal">
-    <div class="modal-content">
-      <span id="closeModal" class="close">&times;</span>
-      <iframe id="mapFrame" width="100%" height="450" style="border:0;" loading="lazy"></iframe>
+  <!-- 🗺️ Modal para Google Maps -->
+  <div id="mapModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-label="Mapa">
+      <button id="closeModal" class="close" aria-label="Fechar mapa">×</button>
+      <iframe id="mapFrame" width="100%" height="450" style="border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </div>
 
