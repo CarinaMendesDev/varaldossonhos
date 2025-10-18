@@ -56,7 +56,7 @@
 
         <!-- 🔹 Carrossel de eventos -->
         <div class="hero-carrossel">
-          <h2 class="titulo-carrossel">Momentos que inspiram ✨</h2>
+          <h2 class="titulo-carrossel">Momentos que inspiram 💫</h2>
           <div class="carousel-container">
             <button class="carousel-btn prev" id="carouselPrev">❮</button>
             <ul class="carousel-track" id="carouselTrack">
@@ -90,14 +90,24 @@
 
   <!-- ============================================================
        ☁️ Cloudinho (mascote interativo)
+       Agora totalmente dinâmico — injetado via cloudinho.js
+       🔗 API: /api/index.js → rotas /api/cloudinho (GET e POST)
+       Compatível com Vercel, Airtable, .NET MAUI e EmailJS
   ============================================================ -->
   <div id="cloudinho"></div>
 
   <!-- ============================================================
-       📜 Scripts principais
+       📜 Scripts principais (modulares e compatíveis com MAUI)
   ============================================================ -->
   <script type="module" src="js/componentes.js"></script>
   <script type="module" src="js/index.js"></script>
   <script type="module" src="js/cloudinho.js"></script>
+
+  <!-- ============================================================
+       🔒 Observações técnicas
+       - cloudinho.js agora injeta o balão e botão dinamicamente
+       - Todas as APIs centralizadas em /api/index.js
+       - EmailJS (formulários) permanece funcional via mailto
+  ============================================================ -->
 </body>
 </html>

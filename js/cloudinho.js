@@ -1,25 +1,58 @@
 // ============================================================
 // ☁️ CLOUDINHO ASSISTENTE — Varal dos Sonhos
+// ------------------------------------------------------------
 // Integra interface flutuante + base de conhecimento (Airtable)
+// Comunicação via /api/index.js (rotas: GET e POST /api/cloudinho)
+// ------------------------------------------------------------
+// Compatível com:
+// ✅ Airtable (base cloudinho_kb)
+// ✅ Vercel (API unificada)
+// ✅ .NET MAUI WebView (WebView injectável)
+// ✅ EmailJS (botão de contato)
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
   await carregarRespostasCloudinho();
+  montarInterfaceCloudinho(); // injeta o HTML dinâmico se ainda não existir
   inicializarCloudinho();
 });
 
 // ============================================================
-// 🔹 Conecta à tabela cloudinho_kb no Airtable
+// 🔹 Conecta à tabela cloudinho_kb no Airtable (GET /api/cloudinho)
 // ============================================================
 async function carregarRespostasCloudinho() {
   try {
-    const res = await fetch("/api/cloudinho");
+    const res = await fetch("/api/cloudinho"); // agora integrado à /api/index.js
     const dados = await res.json();
-    window.cloudinhoKB = dados;
+    window.cloudinhoKB = dados || [];
   } catch (erro) {
     console.error("❌ Erro ao carregar base de conhecimento:", erro);
     window.cloudinhoKB = [];
   }
+}
+
+// ============================================================
+// 🧩 Injeta a interface visual do Cloudinho (caso não exista)
+// ------------------------------------------------------------
+// Isso garante que funcione mesmo se o HTML não tiver sido
+// inserido diretamente no index.html (suporte para .NET MAUI).
+// ============================================================
+function montarInterfaceCloudinho() {
+  if (document.getElementById("cloudinhoBtn")) return; // evita duplicação
+
+  const container = document.getElementById("cloudinho") || document.body.appendChild(document.createElement("div"));
+  container.innerHTML = `
+    <div id="cloudinhoBtn" class="cloudinho-btn" title="Fale com o Cloudinho ☁️">☁️</div>
+    <div id="cloudinhoBubble" class="cloudinho-bubble hide">
+      <p id="cloudinhoText">Olá! Sou o Cloudinho ☁️, posso ajudar?</p>
+      <input id="cloudinhoInput" type="text" placeholder="Digite sua pergunta..." />
+      <div class="cloudinho-actions">
+        <button id="cloudSend" class="btn-cloud">Enviar</button>
+        <button id="cloudAdotar" class="btn-cloud">💌 Adotar</button>
+        <button id="cloudContato" class="btn-cloud">📩 Contato</button>
+      </div>
+    </div>
+  `;
 }
 
 // ============================================================
@@ -29,49 +62,94 @@ function inicializarCloudinho() {
   const bubble = document.getElementById("cloudinhoBubble");
   const button = document.getElementById("cloudinhoBtn");
   const text = document.getElementById("cloudinhoText");
+  const input = document.getElementById("cloudinhoInput");
+  const btnSend = document.getElementById("cloudSend");
   const btnAdotar = document.getElementById("cloudAdotar");
   const btnContato = document.getElementById("cloudContato");
 
   if (!button || !bubble) return;
 
-  // 🔄 Mostrar/ocultar balão
+  // ------------------------------------------------------------
+  // 🔄 Mostrar / ocultar balão (classe revisada para .show)
+  // ------------------------------------------------------------
   button.addEventListener("click", () => {
-    bubble.classList.toggle("visivel");
+    bubble.classList.toggle("show");
   });
 
+  // ------------------------------------------------------------
+  // 💬 Enviar pergunta digitada (sem prompt)
+  // ------------------------------------------------------------
+  let debounceTimer;
+  const enviarPergunta = async () => {
+    const pergunta = input.value.trim();
+    if (!pergunta) return;
+    text.textContent = "Digitando... ☁️";
+    input.value = "";
+
+    // debounce: evita flood de requisições ao digitar rápido
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async () => {
+      const resposta = await enviarPerguntaAPI(pergunta);
+      text.textContent = resposta || "Hmm... não encontrei nada sobre isso 💭";
+    }, 400);
+  };
+
+  btnSend.addEventListener("click", enviarPergunta);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") enviarPergunta();
+  });
+
+  // ------------------------------------------------------------
   // 📤 Botão "Quero Adotar"
-  btnAdotar.addEventListener("click", () => {
+  // ------------------------------------------------------------
+  btnAdotar?.addEventListener("click", () => {
     window.location.href = "cartinhas.html";
   });
 
-  // 📞 Botão "Falar com a equipe"
-  btnContato.addEventListener("click", () => {
+  // ------------------------------------------------------------
+  // 📞 Botão "Falar com a equipe" (integração com EmailJS)
+  // ------------------------------------------------------------
+  btnContato?.addEventListener("click", () => {
     window.open("mailto:contato@varaldossonhos.org", "_blank");
-  });
-
-  // 🧠 Clique duplo no balão → perguntar
-  bubble.addEventListener("dblclick", async () => {
-    const pergunta = prompt("Digite sua pergunta para o Cloudinho ☁️");
-    if (!pergunta) return;
-
-    text.textContent = "Digitando... ☁️";
-    const resposta = buscarResposta(pergunta);
-    text.textContent = resposta || "Hmm... não encontrei nada sobre isso 💭";
   });
 }
 
 // ============================================================
-// 🧠 Busca a resposta por palavras-chave
+// 🧠 Busca local (memória carregada via GET cloudinho_kb)
 // ============================================================
-function buscarResposta(pergunta) {
+function buscarRespostaLocal(pergunta) {
   if (!window.cloudinhoKB || window.cloudinhoKB.length === 0) return null;
   pergunta = pergunta.toLowerCase();
 
   for (const item of window.cloudinhoKB) {
-    const palavras = (item.palavras_chave || []).map(p => p.toLowerCase());
-    if (palavras.some(p => pergunta.includes(p))) {
+    const palavras = (item.palavras_chave || []).map((p) => p.toLowerCase());
+    if (palavras.some((p) => pergunta.includes(p))) {
       return item.resposta;
     }
   }
   return null;
+}
+
+// ============================================================
+// 🌐 Busca via API — fallback remoto (POST /api/cloudinho)
+// ------------------------------------------------------------
+// Agora 100% compatível com /api/index.js consolidado
+// ============================================================
+async function enviarPerguntaAPI(pergunta) {
+  // 1️⃣ tenta achar localmente primeiro (offline / cache)
+  const local = buscarRespostaLocal(pergunta);
+  if (local) return local;
+
+  // 2️⃣ se não achar, faz POST remoto
+  try {
+    const res = await fetch("/api/cloudinho", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mensagem: pergunta }),
+    });
+    const data = await res.json();
+    return data.resposta;
+  } catch {
+    return "❌ Erro ao conectar com o servidor.";
+  }
 }
