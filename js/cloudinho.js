@@ -1,71 +1,77 @@
 // ============================================================
-// ☁️ VARAL DOS SONHOS — Cloudinho.js (versão final com IA gratuita)
-// Mascote flutuante + frases rotativas + respostas Airtable
+// ☁️ CLOUDINHO ASSISTENTE — Varal dos Sonhos
+// Integra interface flutuante + base de conhecimento (Airtable)
 // ============================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await carregarRespostasCloudinho();
+  inicializarCloudinho();
+});
+
+// ============================================================
+// 🔹 Conecta à tabela cloudinho_kb no Airtable
+// ============================================================
+async function carregarRespostasCloudinho() {
+  try {
+    const res = await fetch("/api/cloudinho");
+    const dados = await res.json();
+    window.cloudinhoKB = dados;
+  } catch (erro) {
+    console.error("❌ Erro ao carregar base de conhecimento:", erro);
+    window.cloudinhoKB = [];
+  }
+}
+
+// ============================================================
+// 💬 Inicializa o Cloudinho interativo
+// ============================================================
+function inicializarCloudinho() {
   const bubble = document.getElementById("cloudinhoBubble");
   const button = document.getElementById("cloudinhoBtn");
   const text = document.getElementById("cloudinhoText");
   const btnAdotar = document.getElementById("cloudAdotar");
   const btnContato = document.getElementById("cloudContato");
 
-  // ✨ Frases rotativas
-  const mensagens = [
-    "Oi! Eu sou o Cloudinho ☁️",
-    "Quer ajuda para adotar uma cartinha?",
-    "Cada cartinha é um sonho esperando por você 💙",
-    "Clique aqui para começar a espalhar sorrisos 🌈"
-  ];
-  let index = 0;
+  if (!button || !bubble) return;
 
-  function trocarMensagem() {
-    text.textContent = mensagens[index];
-    index = (index + 1) % mensagens.length;
-  }
-
-  // 💬 Alterna exibição automática do balão
-  function animarBubble() {
-    bubble.classList.add("visivel");
-    setTimeout(() => bubble.classList.remove("visivel"), 6000);
-  }
-
-  // Intervalos rotativos
-  setInterval(trocarMensagem, 5000);
-  setInterval(animarBubble, 15000);
-
-  // Mostra/oculta manualmente ao clicar no Cloudinho
+  // 🔄 Mostrar/ocultar balão
   button.addEventListener("click", () => {
     bubble.classList.toggle("visivel");
   });
 
-  // Ações rápidas (mantidas)
+  // 📤 Botão "Quero Adotar"
   btnAdotar.addEventListener("click", () => {
-    enviarMensagemCloudinho("Como adotar uma cartinha?");
+    window.location.href = "cartinhas.html";
   });
 
+  // 📞 Botão "Falar com a equipe"
   btnContato.addEventListener("click", () => {
-    enviarMensagemCloudinho("Quero falar com a equipe.");
+    window.open("mailto:contato@varaldossonhos.org", "_blank");
   });
 
-  // ============================================================
-  // 🔗 Integração com API do Cloudinho (gratuita via Airtable KB)
-  // ============================================================
+  // 🧠 Clique no balão → perguntar
+  bubble.addEventListener("dblclick", async () => {
+    const pergunta = prompt("Digite sua pergunta para o Cloudinho ☁️");
+    if (!pergunta) return;
 
-  async function enviarMensagemCloudinho(mensagem) {
-    try {
-      text.textContent = "☁️ Pensando...";
-      const resposta = await fetch("/api/cloudinho.api.js", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mensagem })
-      });
-      const data = await resposta.json();
-      text.textContent = data.resposta || "💭 Não encontrei nada sobre isso ainda.";
-      bubble.classList.add("visivel");
-    } catch (erro) {
-      console.error("Erro no Cloudinho:", erro);
-      text.textContent = "💙 Ops! Parece que perdi a conexão...";
+    text.textContent = "Digitando... ☁️";
+    const resposta = buscarResposta(pergunta);
+    text.textContent = resposta || "Hmm... não encontrei nada sobre isso 💭";
+  });
+}
+
+// ============================================================
+// 🧠 Busca a resposta por palavras-chave
+// ============================================================
+function buscarResposta(pergunta) {
+  if (!window.cloudinhoKB || window.cloudinhoKB.length === 0) return null;
+  pergunta = pergunta.toLowerCase();
+
+  for (const item of window.cloudinhoKB) {
+    const palavras = (item.palavras_chave || []).map(p => p.toLowerCase());
+    if (palavras.some(p => pergunta.includes(p))) {
+      return item.resposta;
     }
   }
-});
+  return null;
+}

@@ -2,13 +2,12 @@
  ☁️ Cloudinho — Mascote flutuante e balão de interação
 ============================================================ */
 
-/* === Ícone do Cloudinho flutuante === */
 .cloudinho-button {
   position: fixed;
-  bottom: 45px;             /* visível acima do rodapé */
+  bottom: 85px; /* ↑ espaço para o footer fixo */
   right: 25px;
-  width: 100px;             /* tamanho ajustado */
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -16,10 +15,7 @@
   z-index: 999;
   transition: transform 0.2s ease;
 }
-
-.cloudinho-button:hover {
-  transform: scale(1.05);
-}
+.cloudinho-button:hover { transform: scale(1.05); }
 
 .cloudinho-button img {
   width: 100%;
@@ -28,16 +24,16 @@
   pointer-events: none;
 }
 
-/* === Balão de fala (chat) === */
+/* === Balão de fala === */
 .cloudinho-bubble {
   position: fixed;
-  bottom: 180px;            /* acompanha a nova altura */
+  bottom: 190px;
   right: 25px;
-  width: 280px;             /* ↓ levemente menor (antes 320px) */
-  padding: 12px 14px;       /* ↓ menos espaçamento interno */
+  width: 280px;
+  padding: 12px 14px;
   border-radius: 14px;
-  background: #ffffff;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   border: 2px solid var(--brand-300, #c7d7ff);
   opacity: 0;
   visibility: hidden;
@@ -52,7 +48,6 @@
   transform: translateY(0);
 }
 
-/* === Texto dentro do balão === */
 .cloudinho-bubble p {
   margin: 0 0 10px;
   font-size: 0.9rem;
@@ -61,12 +56,11 @@
   text-align: left;
 }
 
-/* === Botões no balão === */
+/* === Botões === */
 .bubble-actions {
   display: flex;
   gap: 8px;
 }
-
 .bubble-actions .btn {
   flex: 1;
   padding: 7px 9px;
@@ -76,53 +70,40 @@
   cursor: pointer;
   transition: 0.2s;
 }
-
-/* === Botão "Quero adotar" === */
 .bubble-actions .btn-soft {
   background: var(--brand-500, #4a8dff);
   color: white;
 }
-
 .bubble-actions .btn-soft:hover {
   background: var(--brand-400, #6ea3ff);
   transform: scale(1.03);
 }
-
-/* === Botão "Falar com a equipe" === */
 .bubble-actions .btn-outline {
   background: white;
   color: var(--brand-600, #305adb);
   border: 1px solid var(--brand-400, #90aaff);
 }
-
 .bubble-actions .btn-outline:hover {
   background: var(--brand-50, #e8f0ff);
   transform: scale(1.03);
 }
 
-/* === Animação de flutuação === */
 @keyframes flutuar {
-  0%, 100% { transform: translateY(0); }
+  0%,100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
 
-/* === Responsividade === */
 @media (max-width: 768px) {
   .cloudinho-button {
-    width: 85px;
-    height: 85px;
-    bottom: 35px;
+    width: 80px;
+    height: 80px;
+    bottom: 70px;
     right: 15px;
   }
-
   .cloudinho-bubble {
-    width: 240px;           /* reduzido proporcionalmente */
-    bottom: 150px;
-    padding: 10px 12px;
+    width: 240px;
+    bottom: 160px;
     right: 10px;
   }
-
-  .bubble-actions {
-    flex-direction: column;
-  }
+  .bubble-actions { flex-direction: column; }
 }

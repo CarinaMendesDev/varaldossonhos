@@ -21,19 +21,26 @@ async function carregarEventos() {
 
     track.innerHTML = "";
 
-    // ⚠️ Se não houver eventos, mostra imagem padrão
     if (!eventos || eventos.length === 0) {
       adicionarImagemPadrao(track);
       return;
     }
 
-    // Cria slides com fade
+    // 🖼️ Cria slides dinâmicos (campo imagem_evento do Airtable)
     eventos.forEach((ev, i) => {
+      const imagem =
+        ev.imagem_evento?.[0]?.url || // campo array no Airtable
+        ev.imagem ||                  // fallback
+        "imagens/evento-padrao.jpg";  // padrão
+
+      const nome = ev.nome || "Evento Solidário";
+      const data = ev.data_inicio || "";
+
       const li = document.createElement("li");
       li.className = `carousel-slide${i === 0 ? " active" : ""}`;
       li.innerHTML = `
-        <img src="${ev.imagem}" alt="${ev.nome}" 
-             title="${ev.nome} - ${ev.data_inicio || ""}" loading="lazy">
+        <img src="${imagem}" alt="${nome}" 
+             title="${nome} - ${data}" loading="lazy">
       `;
       track.appendChild(li);
     });
@@ -41,7 +48,6 @@ async function carregarEventos() {
     iniciarCarrossel();
   } catch (erro) {
     console.error("❌ Erro ao carregar eventos:", erro);
-    // Exibe fallback se houver erro de rede ou JSON inválido
     adicionarImagemPadrao(track);
   }
 }
@@ -54,7 +60,7 @@ function adicionarImagemPadrao(track) {
     <li class="carousel-slide active">
       <img src="imagens/evento-padrao.jpg" alt="Campanha solidária" loading="lazy">
     </li>`;
-  iniciarCarrossel(); // mantém o fade ativo
+  iniciarCarrossel();
 }
 
 // ============================================================
@@ -68,16 +74,12 @@ function iniciarCarrossel() {
 
   let index = 0;
   const total = slides.length;
-
   if (total === 0) return;
 
-  // Exibe o primeiro slide
   slides[index].classList.add("active");
 
   const mostrarSlide = (novoIndex) => {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle("active", i === novoIndex);
-    });
+    slides.forEach((slide, i) => slide.classList.toggle("active", i === novoIndex));
   };
 
   const proximoSlide = () => {
@@ -90,10 +92,7 @@ function iniciarCarrossel() {
     mostrarSlide(index);
   };
 
-  // Botões de navegação
   nextBtn?.addEventListener("click", proximoSlide);
   prevBtn?.addEventListener("click", slideAnterior);
-
-  // Autoplay a cada 5 segundos
   setInterval(proximoSlide, 5000);
 }
