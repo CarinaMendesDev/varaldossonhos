@@ -101,7 +101,12 @@
   ============================================================ -->
   <script type="module" src="js/componentes.js"></script>
   <script type="module" src="js/index.js"></script>
-  <script type="module" src="js/cloudinho.js"></script>
+
+  <!-- ☁️ Inicializa o Cloudinho dinamicamente -->
+  <script type="module">
+    import { carregarCloudinho } from "./js/cloudinho.js";
+    carregarCloudinho();
+  </script>
 
   <!-- ============================================================
        🔒 Observações técnicas

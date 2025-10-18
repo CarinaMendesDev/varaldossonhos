@@ -11,18 +11,18 @@
 // ✅ EmailJS (botão de contato)
 // ============================================================
 
-document.addEventListener("DOMContentLoaded", async () => {
+export async function carregarCloudinho() {
   await carregarRespostasCloudinho();
   montarInterfaceCloudinho(); // injeta o HTML dinâmico se ainda não existir
   inicializarCloudinho();
-});
+}
 
 // ============================================================
 // 🔹 Conecta à tabela cloudinho_kb no Airtable (GET /api/cloudinho)
 // ============================================================
 async function carregarRespostasCloudinho() {
   try {
-    const res = await fetch("/api/cloudinho"); // agora integrado à /api/index.js
+    const res = await fetch("/api/cloudinho"); // integrado à /api/index.js
     const dados = await res.json();
     window.cloudinhoKB = dados || [];
   } catch (erro) {
@@ -32,15 +32,14 @@ async function carregarRespostasCloudinho() {
 }
 
 // ============================================================
-// 🧩 Injeta a interface visual do Cloudinho (caso não exista)
-// ------------------------------------------------------------
-// Isso garante que funcione mesmo se o HTML não tiver sido
-// inserido diretamente no index.html (suporte para .NET MAUI).
+// 🧩 Injeta a interface visual do Cloudinho
 // ============================================================
 function montarInterfaceCloudinho() {
   if (document.getElementById("cloudinhoBtn")) return; // evita duplicação
 
-  const container = document.getElementById("cloudinho") || document.body.appendChild(document.createElement("div"));
+  const container =
+    document.getElementById("cloudinho") ||
+    document.body.appendChild(document.createElement("div"));
   container.innerHTML = `
     <div id="cloudinhoBtn" class="cloudinho-btn" title="Fale com o Cloudinho ☁️">☁️</div>
     <div id="cloudinhoBubble" class="cloudinho-bubble hide">
@@ -69,16 +68,12 @@ function inicializarCloudinho() {
 
   if (!button || !bubble) return;
 
-  // ------------------------------------------------------------
-  // 🔄 Mostrar / ocultar balão (classe revisada para .show)
-  // ------------------------------------------------------------
+  // 🔄 Mostrar / ocultar balão
   button.addEventListener("click", () => {
     bubble.classList.toggle("show");
   });
 
-  // ------------------------------------------------------------
-  // 💬 Enviar pergunta digitada (sem prompt)
-  // ------------------------------------------------------------
+  // 💬 Enviar pergunta
   let debounceTimer;
   const enviarPergunta = async () => {
     const pergunta = input.value.trim();
@@ -86,7 +81,6 @@ function inicializarCloudinho() {
     text.textContent = "Digitando... ☁️";
     input.value = "";
 
-    // debounce: evita flood de requisições ao digitar rápido
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(async () => {
       const resposta = await enviarPerguntaAPI(pergunta);
@@ -99,16 +93,12 @@ function inicializarCloudinho() {
     if (e.key === "Enter") enviarPergunta();
   });
 
-  // ------------------------------------------------------------
-  // 📤 Botão "Quero Adotar"
-  // ------------------------------------------------------------
+  // 📤 Adotar
   btnAdotar?.addEventListener("click", () => {
     window.location.href = "cartinhas.html";
   });
 
-  // ------------------------------------------------------------
-  // 📞 Botão "Falar com a equipe" (integração com EmailJS)
-  // ------------------------------------------------------------
+  // 📞 Contato (EmailJS)
   btnContato?.addEventListener("click", () => {
     window.open("mailto:contato@varaldossonhos.org", "_blank");
   });
@@ -131,16 +121,12 @@ function buscarRespostaLocal(pergunta) {
 }
 
 // ============================================================
-// 🌐 Busca via API — fallback remoto (POST /api/cloudinho)
-// ------------------------------------------------------------
-// Agora 100% compatível com /api/index.js consolidado
+// 🌐 Busca via API (fallback remoto)
 // ============================================================
 async function enviarPerguntaAPI(pergunta) {
-  // 1️⃣ tenta achar localmente primeiro (offline / cache)
   const local = buscarRespostaLocal(pergunta);
   if (local) return local;
 
-  // 2️⃣ se não achar, faz POST remoto
   try {
     const res = await fetch("/api/cloudinho", {
       method: "POST",
