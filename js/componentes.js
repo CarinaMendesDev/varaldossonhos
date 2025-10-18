@@ -1,73 +1,71 @@
 // ============================================================
-// 🌐 VARAL DOS SONHOS — componentes.js
-// Carrega automaticamente o cabeçalho, rodapé e Cloudinho
-// em todas as páginas do site (index, eventos, cartinhas etc.)
+// 💙 VARAL DOS SONHOS — componentes.js
+// Carrega automaticamente header, footer e Cloudinho
+// e sincroniza login/logout em todas as páginas
 // ============================================================
 
-export async function carregarComponentes() {
-  try {
-    // 🔹 Carrega o Cabeçalho
-    const header = document.getElementById("header");
-    if (header) {
-      const respHeader = await fetch("componentes/header.html");
-      if (respHeader.ok) {
-        header.innerHTML = await respHeader.text();
-      } else {
-        console.warn("⚠️ Cabeçalho não encontrado.");
-      }
-    }
-
-    // 🔹 Carrega o Rodapé
-    const footer = document.getElementById("footer");
-    if (footer) {
-      const respFooter = await fetch("componentes/footer.html");
-      if (respFooter.ok) {
-        footer.innerHTML = await respFooter.text();
-      } else {
-        console.warn("⚠️ Rodapé não encontrado.");
-      }
-    }
-
-    // 🔹 Carrega o Cloudinho
-    const cloudinho = document.getElementById("cloudinho");
-    if (cloudinho) {
-      const respCloudinho = await fetch("componentes/cloudinho.html");
-      if (respCloudinho.ok) {
-        cloudinho.innerHTML = await respCloudinho.text();
-      } else {
-        console.warn("⚠️ Cloudinho não encontrado.");
-      }
-    }
-  } catch (erro) {
-    console.error("❌ Erro ao carregar componentes:", erro);
-  }
-}
-
-// ============================================================
-// 👤 Atualiza o login do usuário (opcional para páginas com login)
-// ============================================================
-export function atualizarLogin() {
-  const usuarioJSON = localStorage.getItem("usuario");
-  const menu = document.querySelector(".menu");
-  if (!menu) return;
-
-  if (usuarioJSON) {
-    const usuario = JSON.parse(usuarioJSON);
-    const nome = usuario.nome || "Usuário";
-
-    // Substitui o botão Login por saudação
-    const loginBtn = menu.querySelector('a[href="login.html"]');
-    if (loginBtn) {
-      loginBtn.textContent = `Olá, ${nome}!`;
-      loginBtn.href = "#";
-    }
-  }
-}
-
-// ============================================================
-// 🚀 Inicializa automaticamente os componentes
-// ============================================================
 document.addEventListener("DOMContentLoaded", async () => {
   await carregarComponentes();
   atualizarLogin();
 });
+
+// ============================================================
+// 🔹 Carregar Header, Footer e Cloudinho
+// ============================================================
+async function carregarComponentes() {
+  try {
+    const header = document.getElementById("header");
+    if (header) {
+      const resp = await fetch("componentes/header.html");
+      header.innerHTML = resp.ok ? await resp.text() : "<p>Header não encontrado</p>";
+    }
+
+    const footer = document.getElementById("footer");
+    if (footer) {
+      const resp = await fetch("componentes/footer.html");
+      footer.innerHTML = resp.ok ? await resp.text() : "<p>Footer não encontrado</p>";
+    }
+
+    const cloudinho = document.getElementById("cloudinho");
+    if (cloudinho) {
+      const resp = await fetch("componentes/cloudinho.html");
+      cloudinho.innerHTML = resp.ok ? await resp.text() : "";
+    }
+
+    // Reaplica o login/logout após carregar header
+    atualizarLogin();
+  } catch (erro) {
+    console.error("Erro ao carregar componentes:", erro);
+  }
+}
+
+// ============================================================
+// 👤 Atualiza status do login e botão “Sair”
+// ============================================================
+function atualizarLogin() {
+  const usuarioData = localStorage.getItem("usuario");
+  const loginLink = document.getElementById("loginLink");
+  const usuarioNome = document.getElementById("usuarioNome");
+  const btnLogout = document.getElementById("btnLogout");
+
+  if (!loginLink || !usuarioNome || !btnLogout) return;
+
+  if (usuarioData) {
+    const usuario = JSON.parse(usuarioData);
+    usuarioNome.textContent = `Olá, ${usuario.nome.split(" ")[0]}!`;
+    usuarioNome.style.display = "inline-block";
+    loginLink.style.display = "none";
+    btnLogout.style.display = "inline-block";
+
+    // Botão sair
+    btnLogout.addEventListener("click", () => {
+      localStorage.removeItem("usuario");
+      alert("Você saiu com sucesso 💙");
+      window.location.href = "index.html";
+    });
+  } else {
+    usuarioNome.style.display = "none";
+    loginLink.style.display = "inline-block";
+    btnLogout.style.display = "none";
+  }
+}

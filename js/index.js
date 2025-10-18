@@ -1,6 +1,7 @@
 // ============================================================
 // 💙 VARAL DOS SONHOS — index.js
 // Home: Carrossel dinâmico de eventos com destaque_home = true
+// Compatível com Vercel, Airtable API, e .NET MAUI WebView
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,19 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ============================================================
-// 🔁 Função: Carrega os eventos do Airtable
+// 🔁 Função: Carrega os eventos do Airtable (via /api/eventos)
 // ============================================================
 async function carregarEventos() {
+  const track = document.getElementById("carouselTrack");
+  if (!track) return;
+
   try {
-    const track = document.getElementById("carouselTrack");
     const res = await fetch("/api/eventos");
     const eventos = await res.json();
 
     track.innerHTML = "";
 
-    // Garante que há eventos válidos
+    // ⚠️ Se não houver eventos, mostra imagem padrão
     if (!eventos || eventos.length === 0) {
-      track.innerHTML = `<li class="carousel-slide active"><img src="imagens/evento-padrao.jpg" alt="Nenhum evento disponível"></li>`;
+      adicionarImagemPadrao(track);
       return;
     }
 
@@ -38,7 +41,20 @@ async function carregarEventos() {
     iniciarCarrossel();
   } catch (erro) {
     console.error("❌ Erro ao carregar eventos:", erro);
+    // Exibe fallback se houver erro de rede ou JSON inválido
+    adicionarImagemPadrao(track);
   }
+}
+
+// ============================================================
+// 🌤️ Fallback visual (quando não há eventos)
+// ============================================================
+function adicionarImagemPadrao(track) {
+  track.innerHTML = `
+    <li class="carousel-slide active">
+      <img src="imagens/evento-padrao.jpg" alt="Campanha solidária" loading="lazy">
+    </li>`;
+  iniciarCarrossel(); // mantém o fade ativo
 }
 
 // ============================================================
@@ -55,31 +71,28 @@ function iniciarCarrossel() {
 
   if (total === 0) return;
 
-  // Ativa o primeiro slide
+  // Exibe o primeiro slide
   slides[index].classList.add("active");
 
-  // Exibe um slide e esconde os outros
   const mostrarSlide = (novoIndex) => {
     slides.forEach((slide, i) => {
       slide.classList.toggle("active", i === novoIndex);
     });
   };
 
-  // 👉 Avançar
   const proximoSlide = () => {
     index = (index + 1) % total;
     mostrarSlide(index);
   };
 
-  // 👈 Voltar
   const slideAnterior = () => {
     index = (index - 1 + total) % total;
     mostrarSlide(index);
   };
 
   // Botões de navegação
-  nextBtn.addEventListener("click", proximoSlide);
-  prevBtn.addEventListener("click", slideAnterior);
+  nextBtn?.addEventListener("click", proximoSlide);
+  prevBtn?.addEventListener("click", slideAnterior);
 
   // Autoplay a cada 5 segundos
   setInterval(proximoSlide, 5000);

@@ -2,9 +2,8 @@
 <html lang="pt-BR">
 <head>
   <!-- ============================================================
-       💙 VARAL DOS SONHOS — Página Inicial
-       Projeto: Fantástica Fábrica de Sonhos
-       Equipe Varal dos Sonhos | Vercel + Airtable + .NET MAUI
+       💙 FANTÁSTICA FÁBRICA DE SONHOS — Página Inicial (Index)
+       Deploy: Vercel + Airtable + EmailJS + .NET MAUI
   ============================================================ -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,29 +12,32 @@
   <meta name="theme-color" content="#4A90E2" />
 
   <title>Fantástica Fábrica de Sonhos 💙</title>
-
-  <!-- 🌈 Estilos globais -->
-  <link rel="stylesheet" href="css/variaveis.css" />
-  <link rel="stylesheet" href="css/header-footer.css" />
-  <link rel="stylesheet" href="css/index.css" />
-  <link rel="stylesheet" href="css/cloudinho.css" />
   <link rel="icon" href="imagens/favicon.png" type="image/png" />
+
+  <!-- 🌈 Estilos unificados -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/cloudinho.css" />
 </head>
 
 <body>
   <!-- ============================================================
-       🔝 Cabeçalho e Rodapé — carregados dinamicamente
-       via js/componentes.js → funções carregarComponentes() e atualizarLogin()
+       🔝 Cabeçalho dinâmico (importado via componentes.js)
   ============================================================ -->
   <div id="header"></div>
 
-  <!-- 🌤️ Hero principal -->
+  <!-- ============================================================
+       🌤️ SEÇÃO HERO — Apresentação principal
+  ============================================================ -->
   <main>
     <section class="hero">
       <div class="container hero-flex">
-        <!-- 🔹 Lado esquerdo -->
+        
+        <!-- 🔹 Texto principal -->
         <div class="hero-texto">
-          <img src="imagens/nuvem-sem-fundo (2).png" alt="Fantástica Fábrica de Sonhos" class="nuvem-flutuante" />
+          <img src="imagens/nuvem-sem-fundo.png"
+               alt="Fantástica Fábrica de Sonhos"
+               class="nuvem-flutuante" />
+
           <h2 class="frase-sub">Adote com responsabilidade 💙</h2>
           <p class="frase-base">
             Cada cartinha que você lê é uma janela para o sonho de uma criança.
@@ -52,21 +54,24 @@
           </ul>
         </div>
 
-        <!-- 🔹 Lado direito: carrossel -->
+        <!-- 🔹 Carrossel de eventos -->
         <div class="hero-carrossel">
           <h2 class="titulo-carrossel">Momentos que inspiram ✨</h2>
           <div class="carousel-container">
             <button class="carousel-btn prev" id="carouselPrev">❮</button>
             <ul class="carousel-track" id="carouselTrack">
-              <!-- imagens vindas dinamicamente da API /api/eventos -->
+              <!-- As imagens dos eventos serão carregadas dinamicamente -->
             </ul>
             <button class="carousel-btn next" id="carouselNext">❯</button>
           </div>
         </div>
+
       </div>
     </section>
 
-    <!-- 📅 Seção de eventos -->
+    <!-- ============================================================
+         📅 Seção de eventos futuros
+    ============================================================ -->
     <section class="strip eventos-strip">
       <div class="container strip-grid">
         <div>
@@ -78,13 +83,19 @@
     </section>
   </main>
 
-  <!-- 🔚 Rodapé dinâmico -->
+  <!-- ============================================================
+       🔚 Rodapé dinâmico
+  ============================================================ -->
   <div id="footer"></div>
 
-  <!-- ☁️ Cloudinho — carregado automaticamente -->
+  <!-- ============================================================
+       ☁️ Cloudinho (mascote interativo)
+  ============================================================ -->
   <div id="cloudinho"></div>
 
-  <!-- 📜 Scripts -->
+  <!-- ============================================================
+       📜 Scripts principais
+  ============================================================ -->
   <script type="module" src="js/componentes.js"></script>
   <script type="module" src="js/index.js"></script>
   <script type="module" src="js/cloudinho.js"></script>

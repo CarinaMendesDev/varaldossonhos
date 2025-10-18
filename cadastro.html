@@ -5,100 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cadastro | Varal dos Sonhos 💙</title>
 
+  <!-- Estilos globais -->
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/header-footer.css" />
+  <link rel="stylesheet" href="css/cadastro.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    .form-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem 1rem;
-      min-height: 80vh;
-    }
-
-    .form-section.card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      padding: 2rem;
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .form-section h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
-
-    .form-section p {
-      text-align: center;
-      color: #555;
-      margin-bottom: 1.5rem;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #d0d7e2;
-      font-family: 'Poppins', sans-serif;
-      margin-bottom: 1rem;
-      transition: border-color 0.2s;
-    }
-
-    input:focus, select:focus {
-      border-color: #3b82f6;
-      outline: none;
-    }
-
-    button.btn-primary {
-      width: 100%;
-      background-color: #1e3a8a;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button.btn-primary:hover {
-      background-color: #2563eb;
-    }
-
-    @media (max-width: 480px) {
-      .form-section.card {
-        padding: 1.5rem;
-        max-width: 90%;
-      }
-    }
-  </style>
 </head>
 
 <body>
-  <!-- ===============================
-       CABEÇALHO
-       =============================== -->
-  <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="index.html">
-        <span class="brand-badge">Varal Virtual</span>
-      </a>
-      <nav class="menu">
-        <a class="menu-link" href="index.html">Início</a>
-        <a class="menu-link" href="cartinhas.html">Varal Virtual</a>
-        <a class="menu-link" href="pontos-de-coleta.html">Pontos de Coleta</a>
-        <a class="btn btn-outline" href="login.html">Login</a>
-      </nav>
-    </div>
-  </header>
+  <!-- 🔝 Cabeçalho dinâmico -->
+  <div id="header"></div>
 
-  <!-- ===============================
-       FORMULÁRIO DE CADASTRO
-       =============================== -->
+  <!-- 🧾 Formulário de Cadastro -->
   <main class="container form-container">
     <section class="form-section card">
       <h2>💙 Crie sua conta</h2>
@@ -116,7 +34,7 @@
 
         <label for="cidade">Cidade</label>
         <input type="text" id="cidade" name="cidade" placeholder="Cidade" required>
-       
+
         <label for="email">E-mail</label>
         <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
 
@@ -141,50 +59,28 @@
     </section>
   </main>
 
-  <!-- ===============================
-       RODAPÉ
-       =============================== -->
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <span>© 2025 Varal dos Sonhos</span>
-      <span>Desenvolvido com amor 💙</span>
-    </div>
-  </footer>
+  <!-- 🔚 Rodapé dinâmico -->
+  <div id="footer"></div>
 
-    <!-- ===============================
-       INTEGRAÇÃO VIA CEP
-       =============================== -->
+  <!-- 🔍 Busca de endereço via CEP -->
   <script>
   async function buscarEnderecoPorCEP() {
     const cep = document.getElementById('cep').value.replace(/\D/g, '');
-
-    if (cep.length !== 8) {
-      alert('CEP inválido. Digite um CEP com 8 dígitos.');
-      return;
-    }
-
-    const url = `https://viacep.com.br/ws/${cep}/json/`;
-
+    if (cep.length !== 8) return alert('CEP inválido. Digite 8 números.');
     try {
-      const resposta = await fetch(url);
-      const dados = await resposta.json();
-
-      if (dados.erro) {
-        alert('CEP não encontrado. Verifique e tente novamente.');
-        return;
-      }
-
-      // Preenche os campos automaticamente
-      document.getElementById('endereco').value = `${dados.logradouro || ''}, ${dados.bairro || ''}`;
-      document.getElementById('cidade').value = dados.localidade || '';
-    } catch (erro) {
-      console.error('Erro ao buscar CEP:', erro);
-      alert('Erro ao buscar endereço. Tente novamente.');
+      const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const d = await r.json();
+      if (d.erro) return alert('CEP não encontrado.');
+      document.getElementById('endereco').value = `${d.logradouro || ''}, ${d.bairro || ''}`;
+      document.getElementById('cidade').value = d.localidade || '';
+    } catch {
+      alert('Erro ao buscar endereço.');
     }
   }
   </script>
 
+  <!-- Scripts globais -->
+  <script type="module" src="js/componentes.js"></script>
   <script src="js/cadastro.js"></script>
-
 </body>
 </html>
