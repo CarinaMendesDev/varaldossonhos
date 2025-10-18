@@ -1,36 +1,16 @@
 // ============================================================
-// 💙 VARAL DOS SONHOS — /api/index.js (CORRIGIDO)
-// Arquivo único de API — versão limpa, comentada e pronta para Vercel
+// 💙 VARAL DOS SONHOS — /api/index.js (VERSÃO FINAL CORRIGIDA)
 // ------------------------------------------------------------
-// Rotas suportadas (GET/POST):
-//   • GET  /api/eventos
-//   • GET  /api/eventos-todos
-//   • GET  /api/evento-detalhe?id=
-//   • GET  /api/cloudinho
-//   • POST /api/cloudinho
-//   • GET  /api/pontosdecoleta
-//   • GET  /api/cartinhas
-//   • POST /api/cadastro
-//   • POST /api/login
-//   • POST /api/adocoes
-// ------------------------------------------------------------
-// Observações importantes sobre integrações:
-// - Airtable: variáveis AIRTABLE_API_KEY e AIRTABLE_BASE_ID devem estar
-//   definidas nas variáveis de ambiente da Vercel.
-// - Email (server): há um import para ../lib/enviarEmail.js (opcional).
-//   É responsabilidade do servidor enviar e-mails (ex: confirmação de adoção)
-//   — para integração com .NET MAUI, o app pode chamar as rotas HTTP deste
-//   arquivo para registrar/doações, login, etc.
-// - Google Maps / Geocoding: recomenda-se gravar latitude/longitude na tabela
-//   pontosdecoleta (colunas lat e lng). Se não houver, exponha a rota para
-//   geocodificar (server-side) usando a API do Google e salve as coordenadas.
-// - emailjs: normalmente é usado no cliente; para operações sensíveis use
-//   envio server-side (enviarConfirmacaoEmail) e apenas acione a partir do
-//   endpoint POST /api/adocoes ou /api/cadastro.
+// 🔧 Integrações previstas:
+//   • Airtable — armazenamento principal (eventos, usuários, cartinhas etc.)
+//   • EmailJS (ou outro serviço de envio de e-mails) — enviar confirmações
+//   • .NET MAUI — consumo de rotas REST (login, cadastro, doações etc.)
+//   • Google Maps — uso dos campos lat/lng em pontos de coleta
+//   • Cloudinho — assistente automático (FAQ inteligente)
 // ------------------------------------------------------------
 
 import Airtable from "airtable";
-import { enviarConfirmacaoEmail } from "./lib/enviarEmail.js"; // opcional: verifique existência
+import enviarEmail from "./lib/enviarEmail.js"; // ✅ Corrigido: import default, não nomeado
 
 // ============================================================
 // 🔑 Configuração Airtable
@@ -49,7 +29,6 @@ const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(AIRTABLE_BASE_ID);
 // ============================================================
 function sendJson(res, status, data) {
   res.statusCode = status;
-  // permitir chamadas do client (ex: localhost durante desenvolvimento)
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
@@ -57,38 +36,39 @@ function sendJson(res, status, data) {
   res.end(JSON.stringify(data, null, 2));
 }
 
-// lê o body de forma robusta e segura
+// ============================================================
+// 📦 Leitura segura do corpo JSON
+// ============================================================
 async function parseJsonBody(req) {
   const chunks = [];
   for await (const c of req) chunks.push(c);
   if (!chunks.length) return {};
   try {
     return JSON.parse(Buffer.concat(chunks).toString());
-  } catch (err) {
-    // body inválido
+  } catch {
     return null;
   }
 }
 
-// helper: extrai rota via query param ?rota= (compatibilidade com chamadas locais)
-function getRotaFromUrl(reqUrl) {
+// ============================================================
+// 🔍 Helper para extrair rota de query string (?rota=)
+// ============================================================
+function getRotaFromUrl(reqUrl, headers) {
   try {
-    const u = new URL(reqUrl, `http://${req.headers.host}`);
+    const u = new URL(reqUrl, `http://${headers.host}`);
     return { fullUrl: u, rota: u.searchParams.get("rota") };
-  } catch (err) {
-    // fallback simples
+  } catch {
     const parts = reqUrl.split("?rota=");
     return { fullUrl: null, rota: parts[1] || null };
   }
 }
 
 // ============================================================
-// 🌈 Handler principal (APENAS UM export default)
+// 🌈 HANDLER PRINCIPAL — único export
 // ============================================================
 export default async function handler(req, res) {
-  // Preflight CORS
+  // ✅ Pré-flight CORS
   if (req.method === "OPTIONS") {
-    // devolve cabeçalhos CORS e encerra
     res.statusCode = 204;
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
@@ -97,8 +77,8 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { method, url } = req;
-  const { fullUrl, rota } = getRotaFromUrl(url);
+  const { method, url, headers } = req;
+  const { fullUrl, rota } = getRotaFromUrl(url, headers);
   const pathname = fullUrl ? fullUrl.pathname : url.split("?")[0];
 
   try {
@@ -152,7 +132,7 @@ export default async function handler(req, res) {
     // GET /api/evento-detalhe?id=
     // ============================================================
     if ((pathname === "/api/evento-detalhe" || rota === "evento-detalhe") && method === "GET") {
-      const id = fullUrl ? fullUrl.searchParams.get("id") : new URL("http://localhost" + url).searchParams.get("id");
+      const id = fullUrl ? fullUrl.searchParams.get("id") : null;
       if (!id) return sendJson(res, 400, { error: "ID do evento não informado" });
 
       const r = await base("eventos").find(id);
@@ -171,7 +151,7 @@ export default async function handler(req, res) {
     }
 
     // ============================================================
-    // ☁️ CLOUDINHO (GET) — carrega base de conhecimento
+    // ☁️ CLOUDINHO — base de conhecimento
     // GET /api/cloudinho
     // ============================================================
     if ((pathname === "/api/cloudinho" || rota === "cloudinho") && method === "GET") {
@@ -185,8 +165,7 @@ export default async function handler(req, res) {
     }
 
     // ============================================================
-    // ☁️ CLOUDINHO (POST) — busca resposta automática
-    // POST /api/cloudinho { mensagem }
+    // ☁️ CLOUDINHO — resposta automática (POST)
     // ============================================================
     if ((pathname === "/api/cloudinho" || rota === "cloudinho") && method === "POST") {
       const body = await parseJsonBody(req);
@@ -198,19 +177,19 @@ export default async function handler(req, res) {
         .firstPage();
 
       if (registros.length > 0) {
-        return sendJson(res, 200, { resposta: registros[0].fields.resposta || "💬 Ainda estou aprendendo sobre isso!" });
+        return sendJson(res, 200, { resposta: registros[0].fields.resposta });
       }
 
-      return sendJson(res, 200, { resposta: "💭 Não encontrei nada sobre isso ainda, mas posso perguntar à equipe!" });
+      return sendJson(res, 200, {
+        resposta: "💭 Ainda não sei sobre isso, mas posso perguntar à equipe!",
+      });
     }
 
     // ============================================================
-    // 📍 PONTOS DE COLETA — locais cadastrados (inclui lat/lng se existir)
-    // GET /api/pontosdecoleta
+    // 📍 PONTOS DE COLETA — integra com Google Maps
     // ============================================================
     if ((pathname === "/api/pontosdecoleta" || rota === "pontosdecoleta") && method === "GET") {
       const registros = await base("pontosdecoleta").select().all();
-      // normaliza o retorno incluindo latitude/longitude se presentes
       const pontos = registros.map((r) => ({
         id: r.id,
         nome_local: r.fields.nome_local || "",
@@ -219,7 +198,6 @@ export default async function handler(req, res) {
         email: r.fields.email || "",
         horario_funcionamento: r.fields.horario_funcionamento || "",
         responsavel: r.fields.responsavel || "",
-        // campos opcionais: lat e lng podem vir como number ou texto
         lat: r.fields.lat || r.fields.latitude || null,
         lng: r.fields.lng || r.fields.longitude || null,
       }));
@@ -227,11 +205,13 @@ export default async function handler(req, res) {
     }
 
     // ============================================================
-    // 💌 CARTINHAS — status “disponível”
-    // GET /api/cartinhas
+    // 💌 CARTINHAS — lista disponíveis para adoção
     // ============================================================
     if ((pathname === "/api/cartinhas" || rota === "cartinhas") && method === "GET") {
-      const registros = await base("cartinhas").select({ filterByFormula: "IF({status}='disponível', TRUE(), FALSE())" }).all();
+      const registros = await base("cartinhas")
+        .select({ filterByFormula: "IF({status}='disponível', TRUE(), FALSE())" })
+        .all();
+
       const cartinhas = registros.map((r) => {
         const f = r.fields;
         return {
@@ -248,8 +228,7 @@ export default async function handler(req, res) {
     }
 
     // ============================================================
-    // 🧍 CADASTRO — cria novo usuário
-    // POST /api/cadastro { nome, email, senha }
+    // 🧍 CADASTRO — cria novo usuário (para .NET MAUI ou Web)
     // ============================================================
     if ((pathname === "/api/cadastro" || rota === "cadastro") && method === "POST") {
       const body = await parseJsonBody(req);
@@ -257,27 +236,36 @@ export default async function handler(req, res) {
       const { nome, email, senha } = body;
       if (!nome || !email || !senha) return sendJson(res, 400, { error: "Campos obrigatórios faltando." });
 
-      const existentes = await base("usuario").select({ filterByFormula: `{email} = "${email}"`, maxRecords: 1 }).firstPage();
+      const existentes = await base("usuario")
+        .select({ filterByFormula: `{email} = "${email}"`, maxRecords: 1 })
+        .firstPage();
       if (existentes.length > 0) return sendJson(res, 409, { error: "E-mail já cadastrado." });
 
-      const novo = await base("usuario").create([ { fields: { nome, email, senha, tipo_usuario: "doador", status: "ativo", data_cadastro: new Date().toISOString().split("T")[0] } } ]);
+      const novo = await base("usuario").create([
+        {
+          fields: {
+            nome,
+            email,
+            senha,
+            tipo_usuario: "doador",
+            status: "ativo",
+            data_cadastro: new Date().toISOString().split("T")[0],
+          },
+        },
+      ]);
 
-      // opcional: enviar e-mail de boas-vindas (se lib estiver configurada)
+      // ✅ Envio de e-mail (simulado)
       try {
-        if (typeof enviarConfirmacaoEmail === "function") {
-          // enviarConfirmacaoEmail pode esperar (email, assunto, texto)
-          await enviarConfirmacaoEmail(email, "Obrigado pelo cadastro", `Olá ${nome}, bem-vindo!`);
-        }
+        await enviarEmail(email, "Bem-vindo ao Varal dos Sonhos", `Olá ${nome}, seu cadastro foi realizado!`);
       } catch (err) {
-        console.warn("Falha ao enviar e-mail de confirmação:", err.message || err);
+        console.warn("Falha ao enviar e-mail:", err);
       }
 
       return sendJson(res, 200, { message: "Usuário cadastrado com sucesso.", id: novo[0].id });
     }
 
     // ============================================================
-    // 🔐 LOGIN — autentica usuário
-    // POST /api/login { email, senha }
+    // 🔐 LOGIN — autenticação simples
     // ============================================================
     if ((pathname === "/api/login" || rota === "login") && method === "POST") {
       const body = await parseJsonBody(req);
@@ -285,18 +273,27 @@ export default async function handler(req, res) {
       const { email, senha } = body;
       if (!email || !senha) return sendJson(res, 400, { error: "Email e senha obrigatórios." });
 
-      const registros = await base("usuario").select({ filterByFormula: `{email} = "${email}"`, maxRecords: 1 }).firstPage();
+      const registros = await base("usuario")
+        .select({ filterByFormula: `{email} = "${email}"`, maxRecords: 1 })
+        .firstPage();
       if (registros.length === 0) return sendJson(res, 401, { error: "Usuário não encontrado." });
 
       const usuario = registros[0].fields;
       if (usuario.senha !== senha) return sendJson(res, 401, { error: "Senha incorreta." });
 
-      return sendJson(res, 200, { success: true, usuario: { id: registros[0].id, nome: usuario.nome, email: usuario.email, tipo_usuario: usuario.tipo_usuario || "doador" } });
+      return sendJson(res, 200, {
+        success: true,
+        usuario: {
+          id: registros[0].id,
+          nome: usuario.nome,
+          email: usuario.email,
+          tipo_usuario: usuario.tipo_usuario || "doador",
+        },
+      });
     }
 
     // ============================================================
-    // 💝 ADOÇÕES — registra novas doações e opcionalmente envia e-mail
-    // POST /api/adocoes { usuarioEmail, cartinhas }
+    // 💝 ADOÇÕES — registra e confirma via e-mail
     // ============================================================
     if ((pathname === "/api/adocoes" || rota === "adocoes") && method === "POST") {
       const body = await parseJsonBody(req);
@@ -305,22 +302,28 @@ export default async function handler(req, res) {
       if (!usuarioEmail || !Array.isArray(cartinhas)) return sendJson(res, 400, { error: "Dados inválidos." });
 
       for (const c of cartinhas) {
-        await base("doacoes").create([ { fields: {
-          doador: usuarioEmail,
-          cartinha: c.id_cartinha || c.id || "",
-          ponto_coleta: c.ponto_coleta || "",
-          data_doacao: new Date().toISOString().split("T")[0],
-          status_doacao: "aguardando_entrega",
-        } } ]);
+        await base("doacoes").create([
+          {
+            fields: {
+              doador: usuarioEmail,
+              cartinha: c.id_cartinha || c.id || "",
+              ponto_coleta: c.ponto_coleta || "",
+              data_doacao: new Date().toISOString().split("T")[0],
+              status_doacao: "aguardando_entrega",
+            },
+          },
+        ]);
       }
 
-      // tentar enviar e-mail de confirmação via lib server-side (se disponível)
+      // ✅ Envia e-mail de confirmação
       try {
-        if (typeof enviarConfirmacaoEmail === "function") {
-          await enviarConfirmacaoEmail(usuarioEmail, "Confirmação de Adoção", `Recebemos sua adoção de ${cartinhas.length} cartinha(s). Obrigado!`);
-        }
+        await enviarEmail(
+          usuarioEmail,
+          "Confirmação de Adoção",
+          `Recebemos sua adoção de ${cartinhas.length} cartinha(s). Obrigado pelo carinho!`
+        );
       } catch (err) {
-        console.warn("Falha ao enviar e-mail de confirmação:", err.message || err);
+        console.warn("Erro ao enviar confirmação:", err);
       }
 
       return sendJson(res, 200, { success: true, message: "Adoções registradas com sucesso!" });
