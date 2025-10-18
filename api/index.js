@@ -30,7 +30,7 @@
 // ------------------------------------------------------------
 
 import Airtable from "airtable";
-import { enviarConfirmacaoEmail } from "../lib/enviarEmail.js"; // opcional: verifique existência
+import { enviarConfirmacaoEmail } from "./lib/enviarEmail.js"; // opcional: verifique existência
 
 // ============================================================
 // 🔑 Configuração Airtable
