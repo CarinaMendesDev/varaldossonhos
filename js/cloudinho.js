@@ -49,7 +49,7 @@ function inicializarCloudinho() {
     window.open("mailto:contato@varaldossonhos.org", "_blank");
   });
 
-  // 🧠 Clique no balão → perguntar
+  // 🧠 Clique duplo no balão → perguntar
   bubble.addEventListener("dblclick", async () => {
     const pergunta = prompt("Digite sua pergunta para o Cloudinho ☁️");
     if (!pergunta) return;

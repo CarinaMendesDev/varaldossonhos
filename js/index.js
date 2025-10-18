@@ -1,7 +1,7 @@
 // ============================================================
 // 💙 VARAL DOS SONHOS — index.js
-// Home: Carrossel dinâmico de eventos com destaque_home = true
-// Compatível com Vercel, Airtable API, e .NET MAUI WebView
+// Carrossel dinâmico de eventos com destaque_home = true
+// Compatível com Airtable API, Vercel e .NET MAUI WebView
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ============================================================
-// 🔁 Função: Carrega os eventos do Airtable (via /api/eventos)
+// 🔁 Carrega os eventos do Airtable (via /api/eventos)
 // ============================================================
 async function carregarEventos() {
   const track = document.getElementById("carouselTrack");
@@ -26,12 +26,12 @@ async function carregarEventos() {
       return;
     }
 
-    // 🖼️ Cria slides dinâmicos (campo imagem_evento do Airtable)
+    // Cria slides com fade
     eventos.forEach((ev, i) => {
       const imagem =
-        ev.imagem_evento?.[0]?.url || // campo array no Airtable
-        ev.imagem ||                  // fallback
-        "imagens/evento-padrao.jpg";  // padrão
+        ev.imagem_evento?.[0]?.url || // Airtable retorna array
+        ev.imagem ||                  // fallback campo único
+        "imagens/evento-padrao.jpg";  // fallback final
 
       const nome = ev.nome || "Evento Solidário";
       const data = ev.data_inicio || "";
@@ -53,7 +53,7 @@ async function carregarEventos() {
 }
 
 // ============================================================
-// 🌤️ Fallback visual (quando não há eventos)
+// 🌤️ Imagem padrão quando não há eventos
 // ============================================================
 function adicionarImagemPadrao(track) {
   track.innerHTML = `
@@ -64,7 +64,7 @@ function adicionarImagemPadrao(track) {
 }
 
 // ============================================================
-// 🎞️ Função: Controla o carrossel com efeito fade
+// 🎞️ Controle do carrossel com fade
 // ============================================================
 function iniciarCarrossel() {
   const track = document.getElementById("carouselTrack");
