@@ -1,10 +1,10 @@
-// js/notificacao.js
 // ====================================================
 // ☁️ Cloudinho - Envio automático de e-mail via EmailJS
 // ====================================================
 
 // Inicializa a API do EmailJS com sua chave pública
-emailjs.init("dPZt5JBiJSLejLZgB"); // substitua se mudar sua Public Key
+// ⚠️ Substitua "SUA_PUBLIC_KEY_AQUI" pela sua chave real do EmailJS (Public Key)
+emailjs.init("SUA_PUBLIC_KEY_AQUI");
 
 // Captura o botão do Cloudinho
 const botao = document.getElementById("cloudinhoBtn");
