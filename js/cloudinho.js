@@ -1,28 +1,29 @@
 // ============================================================
-// ☁️ CLOUDINHO ASSISTENTE — Varal dos Sonhos
+// ☁️ CLOUDINHO ASSISTENTE — Fantástica Fábrica de Sonhos
 // ------------------------------------------------------------
-// Integra interface flutuante + base de conhecimento (Airtable)
+// Interface flutuante + base de conhecimento (Airtable)
 // Comunicação via /api/index.js (rotas: GET e POST /api/cloudinho)
 // ------------------------------------------------------------
 // Compatível com:
 // ✅ Airtable (base cloudinho_kb)
 // ✅ Vercel (API unificada)
-// ✅ .NET MAUI WebView (WebView injectável)
+// ✅ .NET MAUI WebView (injetável)
 // ✅ EmailJS (botão de contato)
 // ============================================================
 
-export async function carregarCloudinho() {
-  await carregarRespostasCloudinho();
-  montarInterfaceCloudinho(); // injeta o HTML dinâmico se ainda não existir
-  inicializarCloudinho();
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  await carregarRespostasCloudinho(); // carrega base Airtable
+  montarInterfaceCloudinho();         // injeta HTML dinâmico
+  inicializarCloudinho();             // ativa interação
+  mostrarMensagemInicial();           // fala automaticamente
+});
 
 // ============================================================
-// 🔹 Conecta à tabela cloudinho_kb no Airtable (GET /api/cloudinho)
+// 🔹 Carrega respostas do Airtable (GET /api/cloudinho)
 // ============================================================
 async function carregarRespostasCloudinho() {
   try {
-    const res = await fetch("/api/cloudinho"); // integrado à /api/index.js
+    const res = await fetch("/api/cloudinho");
     const dados = await res.json();
     window.cloudinhoKB = dados || [];
   } catch (erro) {
@@ -32,7 +33,7 @@ async function carregarRespostasCloudinho() {
 }
 
 // ============================================================
-// 🧩 Injeta a interface visual do Cloudinho
+// 🧩 Cria o HTML do Cloudinho dinamicamente (usa imagem PNG)
 // ============================================================
 function montarInterfaceCloudinho() {
   if (document.getElementById("cloudinhoBtn")) return; // evita duplicação
@@ -40,10 +41,13 @@ function montarInterfaceCloudinho() {
   const container =
     document.getElementById("cloudinho") ||
     document.body.appendChild(document.createElement("div"));
+
   container.innerHTML = `
-    <div id="cloudinhoBtn" class="cloudinho-btn" title="Fale com o Cloudinho ☁️">☁️</div>
-    <div id="cloudinhoBubble" class="cloudinho-bubble hide">
-      <p id="cloudinhoText">Olá! Sou o Cloudinho ☁️, posso ajudar?</p>
+    <div id="cloudinhoBtn" class="cloudinho-btn" title="Fale com o Cloudinho ☁️">
+      <img src="imagens/cloudinho.png" alt="Cloudinho mascote" class="cloudinho-img" />
+    </div>
+    <div id="cloudinhoBubble" class="cloudinho-bubble">
+      <p id="cloudinhoText">Olá! ☁️ Sou o Cloudinho 💙</p>
       <input id="cloudinhoInput" type="text" placeholder="Digite sua pergunta..." />
       <div class="cloudinho-actions">
         <button id="cloudSend" class="btn-cloud">Enviar</button>
@@ -55,7 +59,7 @@ function montarInterfaceCloudinho() {
 }
 
 // ============================================================
-// 💬 Inicializa o Cloudinho interativo
+// 💬 Inicializa eventos e interação
 // ============================================================
 function inicializarCloudinho() {
   const bubble = document.getElementById("cloudinhoBubble");
@@ -68,7 +72,7 @@ function inicializarCloudinho() {
 
   if (!button || !bubble) return;
 
-  // 🔄 Mostrar / ocultar balão
+  // 🔄 Mostrar / ocultar balão manualmente
   button.addEventListener("click", () => {
     bubble.classList.toggle("show");
   });
@@ -78,6 +82,7 @@ function inicializarCloudinho() {
   const enviarPergunta = async () => {
     const pergunta = input.value.trim();
     if (!pergunta) return;
+
     text.textContent = "Digitando... ☁️";
     input.value = "";
 
@@ -98,14 +103,53 @@ function inicializarCloudinho() {
     window.location.href = "cartinhas.html";
   });
 
-  // 📞 Contato (EmailJS)
+  // 📞 Contato (via EmailJS ou fallback mailto)
   btnContato?.addEventListener("click", () => {
-    window.open("mailto:contato@varaldossonhos.org", "_blank");
+    if (typeof emailjs !== "undefined") {
+      emailjs.send("service_varaldossonhos", "template_contato", {
+        to_name: "Equipe Varal dos Sonhos",
+        message: "Contato via Cloudinho ☁️",
+      });
+      text.textContent = "📩 Mensagem enviada! Obrigado 💙";
+    } else {
+      window.open("mailto:contato@varaldossonhos.org", "_blank");
+    }
   });
 }
 
 // ============================================================
-// 🧠 Busca local (memória carregada via GET cloudinho_kb)
+// 💬 Mostra mensagem inicial e recolhe se não houver interação
+// ============================================================
+function mostrarMensagemInicial() {
+  const bubble = document.getElementById("cloudinhoBubble");
+  const text = document.getElementById("cloudinhoText");
+  const input = document.getElementById("cloudinhoInput");
+
+  if (!bubble || !text) return;
+
+  // Mostra o balão 1s após carregar
+  setTimeout(() => {
+    bubble.classList.add("show");
+    text.textContent = "Olá! ☁️ Sou o Cloudinho, seu assistente dos sonhos 💙";
+  }, 1000);
+
+  // Depois de 3s, complementa
+  setTimeout(() => {
+    text.textContent += " Quer adotar um sonho hoje?";
+  }, 3000);
+
+  // ⏰ Recolhe se não houver interação
+  let interagiu = false;
+  input?.addEventListener("input", () => (interagiu = true));
+  bubble?.addEventListener("click", () => (interagiu = true));
+
+  setTimeout(() => {
+    if (!interagiu) bubble.classList.remove("show");
+  }, 10000); // 10 segundos
+}
+
+// ============================================================
+// 🧠 Busca local (cache do Airtable)
 // ============================================================
 function buscarRespostaLocal(pergunta) {
   if (!window.cloudinhoKB || window.cloudinhoKB.length === 0) return null;
@@ -121,21 +165,63 @@ function buscarRespostaLocal(pergunta) {
 }
 
 // ============================================================
-// 🌐 Busca via API (fallback remoto)
+// 🌐 Busca via API (fallback remoto + log)
 // ============================================================
 async function enviarPerguntaAPI(pergunta) {
   const local = buscarRespostaLocal(pergunta);
-  if (local) return local;
+  const origem = detectarOrigem();
 
   try {
     const res = await fetch("/api/cloudinho", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mensagem: pergunta }),
+      body: JSON.stringify({ mensagem: pergunta, origem }),
     });
     const data = await res.json();
+
+    // 💾 registra log da interação
+    registrarInteracao(pergunta, data.resposta, origem);
+
     return data.resposta;
   } catch {
     return "❌ Erro ao conectar com o servidor.";
   }
+}
+
+// ============================================================
+// 💾 Registro da interação (para tabela interacoes_log)
+// ============================================================
+async function registrarInteracao(pergunta, resposta, origem = "Web") {
+  try {
+    await fetch("/api/interacoes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pergunta,
+        resposta,
+        origem,
+        data: new Date().toISOString(),
+      }),
+    });
+  } catch (e) {
+    console.warn("⚠️ Não foi possível registrar interação:", e);
+  }
+}
+
+// ============================================================
+// 📱 Detecta origem do acesso
+// ============================================================
+function detectarOrigem() {
+  if (window?.navigator?.userAgent?.includes("MAUI")) return ".NET MAUI";
+  if (/Android|iPhone|iPad/i.test(navigator.userAgent)) return "Mobile";
+  return "Web";
+}
+
+// ============================================================
+// 🌈 Exportações globais (.NET MAUI / Vercel)
+// ============================================================
+if (typeof window !== "undefined") {
+  window.inicializarCloudinho = inicializarCloudinho;
+  window.montarInterfaceCloudinho = montarInterfaceCloudinho;
+  window.carregarRespostasCloudinho = carregarRespostasCloudinho;
 }

@@ -89,15 +89,15 @@
   <div id="footer"></div>
 
   <!-- ============================================================
-       ☁️ Cloudinho (mascote interativo)
-       Agora totalmente dinâmico — injetado via cloudinho.js
-       🔗 API: /api/index.js → rotas /api/cloudinho (GET e POST)
-       Compatível com Vercel, Airtable, .NET MAUI e EmailJS
+       ☁️ CLOUDINHO — mascote interativo com IA e sumiço automático
+       - Usa imagem: /imagens/cloudinho.png
+       - Interação: fala, responde e some após inatividade
+       - Integrado com /api/index.js → rotas Airtable, .NET MAUI, EmailJS
   ============================================================ -->
   <div id="cloudinho"></div>
 
   <!-- ============================================================
-       📜 Scripts principais (modulares e compatíveis com MAUI)
+       📜 Scripts principais
   ============================================================ -->
   <script type="module" src="js/componentes.js"></script>
   <script type="module" src="js/index.js"></script>
@@ -105,14 +105,10 @@
   <!-- ☁️ Inicializa o Cloudinho dinamicamente -->
   <script type="module">
     import { carregarCloudinho } from "./js/cloudinho.js";
-    carregarCloudinho();
+    carregarCloudinho({
+      imagem: "imagens/cloudinho.png",
+      tempoSumir: 10000 // 10 segundos sem interação
+    });
   </script>
-
-  <!-- ============================================================
-       🔒 Observações técnicas
-       - cloudinho.js agora injeta o balão e botão dinamicamente
-       - Todas as APIs centralizadas em /api/index.js
-       - EmailJS (formulários) permanece funcional via mailto
-  ============================================================ -->
 </body>
 </html>

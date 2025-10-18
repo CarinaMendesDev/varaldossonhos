@@ -1,5 +1,5 @@
 // ============================================================
-// 💙 VARAL DOS SONHOS — /api/index.js (VERSÃO FINAL CORRIGIDA)
+// 💙 VARAL DOS SONHOS — /api/index.js (VERSÃO FINAL UNIFICADA)
 // ------------------------------------------------------------
 // 🔧 Integrações previstas:
 //   • Airtable — armazenamento principal (eventos, usuários, cartinhas etc.)
@@ -7,10 +7,10 @@
 //   • .NET MAUI — consumo de rotas REST (login, cadastro, doações etc.)
 //   • Google Maps — uso dos campos lat/lng em pontos de coleta
 //   • Cloudinho — assistente automático (FAQ inteligente)
-// ------------------------------------------------------------
+// ============================================================
 
 import Airtable from "airtable";
-import enviarEmail from "./lib/enviarEmail.js"; // ✅ Corrigido: import default, não nomeado
+import enviarEmail from "./lib/enviarEmail.js"; // ✅ Importação correta
 
 // ============================================================
 // 🔑 Configuração Airtable
@@ -51,7 +51,7 @@ async function parseJsonBody(req) {
 }
 
 // ============================================================
-// 🔍 Helper para extrair rota de query string (?rota=)
+// 🔍 Helper para extrair rota (?rota=)
 // ============================================================
 function getRotaFromUrl(reqUrl, headers) {
   try {
@@ -64,7 +64,7 @@ function getRotaFromUrl(reqUrl, headers) {
 }
 
 // ============================================================
-// 🌈 HANDLER PRINCIPAL — único export
+// 🌈 HANDLER PRINCIPAL — export único
 // ============================================================
 export default async function handler(req, res) {
   // ✅ Pré-flight CORS
@@ -84,7 +84,6 @@ export default async function handler(req, res) {
   try {
     // ============================================================
     // 🗓️ EVENTOS — destaques (Home/carrossel)
-    // GET /api/eventos
     // ============================================================
     if ((pathname === "/api/eventos" || rota === "eventos") && method === "GET") {
       const records = await base("eventos")
@@ -102,13 +101,11 @@ export default async function handler(req, res) {
         imagem:
           r.fields.imagem_evento?.[0]?.url || r.fields.imagem?.[0]?.url || "/imagens/evento-padrao.jpg",
       }));
-
       return sendJson(res, 200, eventos);
     }
 
     // ============================================================
     // 📅 EVENTOS-TODOS — lista completa
-    // GET /api/eventos-todos
     // ============================================================
     if ((pathname === "/api/eventos-todos" || rota === "eventos-todos") && method === "GET") {
       const records = await base("eventos").select().all();
@@ -129,12 +126,10 @@ export default async function handler(req, res) {
 
     // ============================================================
     // 📝 EVENTO-DETALHE — detalhe individual
-    // GET /api/evento-detalhe?id=
     // ============================================================
     if ((pathname === "/api/evento-detalhe" || rota === "evento-detalhe") && method === "GET") {
       const id = fullUrl ? fullUrl.searchParams.get("id") : null;
       if (!id) return sendJson(res, 400, { error: "ID do evento não informado" });
-
       const r = await base("eventos").find(id);
       const evento = {
         id: r.id,
@@ -152,7 +147,6 @@ export default async function handler(req, res) {
 
     // ============================================================
     // ☁️ CLOUDINHO — base de conhecimento
-    // GET /api/cloudinho
     // ============================================================
     if ((pathname === "/api/cloudinho" || rota === "cloudinho") && method === "GET") {
       const registros = await base("cloudinho_kb").select().all();
@@ -164,29 +158,23 @@ export default async function handler(req, res) {
       return sendJson(res, 200, dados);
     }
 
-    // ============================================================
-    // ☁️ CLOUDINHO — resposta automática (POST)
-    // ============================================================
+    // ☁️ CLOUDINHO — resposta automática
     if ((pathname === "/api/cloudinho" || rota === "cloudinho") && method === "POST") {
       const body = await parseJsonBody(req);
       if (body === null) return sendJson(res, 400, { error: "Corpo inválido" });
       const { mensagem } = body || {};
-
       const registros = await base("cloudinho_kb")
         .select({ filterByFormula: `FIND(LOWER("${mensagem || ""}"), LOWER({pergunta}))` })
         .firstPage();
-
-      if (registros.length > 0) {
+      if (registros.length > 0)
         return sendJson(res, 200, { resposta: registros[0].fields.resposta });
-      }
-
       return sendJson(res, 200, {
         resposta: "💭 Ainda não sei sobre isso, mas posso perguntar à equipe!",
       });
     }
 
     // ============================================================
-    // 📍 PONTOS DE COLETA — integra com Google Maps
+    // 📍 PONTOS DE COLETA
     // ============================================================
     if ((pathname === "/api/pontosdecoleta" || rota === "pontosdecoleta") && method === "GET") {
       const registros = await base("pontosdecoleta").select().all();
@@ -205,13 +193,12 @@ export default async function handler(req, res) {
     }
 
     // ============================================================
-    // 💌 CARTINHAS — lista disponíveis para adoção
+    // 💌 CARTINHAS — disponíveis para adoção
     // ============================================================
     if ((pathname === "/api/cartinhas" || rota === "cartinhas") && method === "GET") {
       const registros = await base("cartinhas")
         .select({ filterByFormula: "IF({status}='disponível', TRUE(), FALSE())" })
         .all();
-
       const cartinhas = registros.map((r) => {
         const f = r.fields;
         return {
@@ -228,18 +215,20 @@ export default async function handler(req, res) {
     }
 
     // ============================================================
-    // 🧍 CADASTRO — cria novo usuário (para .NET MAUI ou Web)
+    // 🧍 CADASTRO — cria novo usuário
     // ============================================================
     if ((pathname === "/api/cadastro" || rota === "cadastro") && method === "POST") {
       const body = await parseJsonBody(req);
       if (body === null) return sendJson(res, 400, { error: "Corpo inválido" });
       const { nome, email, senha } = body;
-      if (!nome || !email || !senha) return sendJson(res, 400, { error: "Campos obrigatórios faltando." });
+      if (!nome || !email || !senha)
+        return sendJson(res, 400, { error: "Campos obrigatórios faltando." });
 
       const existentes = await base("usuario")
         .select({ filterByFormula: `{email} = "${email}"`, maxRecords: 1 })
         .firstPage();
-      if (existentes.length > 0) return sendJson(res, 409, { error: "E-mail já cadastrado." });
+      if (existentes.length > 0)
+        return sendJson(res, 409, { error: "E-mail já cadastrado." });
 
       const novo = await base("usuario").create([
         {
@@ -254,7 +243,6 @@ export default async function handler(req, res) {
         },
       ]);
 
-      // ✅ Envio de e-mail (simulado)
       try {
         await enviarEmail(email, "Bem-vindo ao Varal dos Sonhos", `Olá ${nome}, seu cadastro foi realizado!`);
       } catch (err) {
@@ -272,15 +260,12 @@ export default async function handler(req, res) {
       if (body === null) return sendJson(res, 400, { error: "Corpo inválido" });
       const { email, senha } = body;
       if (!email || !senha) return sendJson(res, 400, { error: "Email e senha obrigatórios." });
-
       const registros = await base("usuario")
         .select({ filterByFormula: `{email} = "${email}"`, maxRecords: 1 })
         .firstPage();
       if (registros.length === 0) return sendJson(res, 401, { error: "Usuário não encontrado." });
-
       const usuario = registros[0].fields;
       if (usuario.senha !== senha) return sendJson(res, 401, { error: "Senha incorreta." });
-
       return sendJson(res, 200, {
         success: true,
         usuario: {
@@ -299,7 +284,8 @@ export default async function handler(req, res) {
       const body = await parseJsonBody(req);
       if (body === null) return sendJson(res, 400, { error: "Corpo inválido" });
       const { usuarioEmail, cartinhas } = body;
-      if (!usuarioEmail || !Array.isArray(cartinhas)) return sendJson(res, 400, { error: "Dados inválidos." });
+      if (!usuarioEmail || !Array.isArray(cartinhas))
+        return sendJson(res, 400, { error: "Dados inválidos." });
 
       for (const c of cartinhas) {
         await base("doacoes").create([
@@ -315,7 +301,6 @@ export default async function handler(req, res) {
         ]);
       }
 
-      // ✅ Envia e-mail de confirmação
       try {
         await enviarEmail(
           usuarioEmail,
@@ -335,6 +320,9 @@ export default async function handler(req, res) {
     return sendJson(res, 404, { erro: "Rota não encontrada." });
   } catch (erro) {
     console.error("❌ Erro interno:", erro);
-    return sendJson(res, 500, { erro: "Erro interno no servidor.", detalhe: erro.message || String(erro) });
+    return sendJson(res, 500, {
+      erro: "Erro interno no servidor.",
+      detalhe: erro.message || String(erro),
+    });
   }
 }

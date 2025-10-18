@@ -1,189 +1,120 @@
 /* ============================================================
- ☁️ CLOUDINHO — Mascote flutuante e balão de interação
- ------------------------------------------------------------
- Compatível com:
-  - Vercel (SPA responsiva)
-  - Airtable (cloudinho_kb)
-  - .NET MAUI WebView (injeção dinâmica de HTML)
-  - EmailJS (botão de contato)
- ------------------------------------------------------------
- Mantido estilo original, agora com classes atualizadas:
-  .visivel → .show  |  (para compatibilidade com JS revisado)
- ============================================================ */
+   ☁️ CLOUDINHO ASSISTENTE — Estilos e Animações
+   ============================================================ */
 
-/* ------------------------------------------------------------
-   ☁️ Botão flutuante do mascote
------------------------------------------------------------- */
-.cloudinho-btn,
-.cloudinho-button {
+.cloudinho-btn {
   position: fixed;
-  bottom: 85px;
-  right: 25px;
-  width: 90px;
-  height: 90px;
-  border: none;
+  bottom: 24px;
+  right: 24px;
   background: transparent;
+  border: none;
   cursor: pointer;
-  animation: flutuar 4s ease-in-out infinite;
-  z-index: 999;
-  transition: transform 0.2s ease;
+  width: 80px;
+  height: 80px;
+  z-index: 1000;
+  transition: transform 0.25s ease;
 }
 
-.cloudinho-btn:hover,
-.cloudinho-button:hover {
-  transform: scale(1.05);
+.cloudinho-btn:hover {
+  transform: scale(1.1);
 }
 
-/* Ícone do mascote (nuvem ou imagem SVG) */
-.cloudinho-btn img,
-.cloudinho-button img {
+.cloudinho-img {
   width: 100%;
-  height: auto;
-  user-select: none;
-  pointer-events: none;
+  height: 100%;
+  object-fit: contain;
+  animation: flutuar 3.5s ease-in-out infinite;
 }
 
-/* ------------------------------------------------------------
-   💬 Balão de interação do Cloudinho
------------------------------------------------------------- */
+@keyframes flutuar {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+/* ============================================================
+   💬 Balão de conversa
+   ============================================================ */
 .cloudinho-bubble {
   position: fixed;
-  bottom: 190px;
-  right: 25px;
-  width: 280px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  border: 2px solid var(--brand-300, #c7d7ff);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(15px);
-  transition: all 0.4s ease;
-  z-index: 1000;
-}
-
-/* Novo estado ativo → substitui .visivel */
-.cloudinho-bubble.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-/* Estado oculto explícito */
-.cloudinho-bubble.hide {
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(15px);
-}
-
-/* Texto dentro do balão */
-.cloudinho-bubble p {
-  margin: 0 0 10px;
-  font-size: 0.9rem;
-  color: var(--brand-700, #1a347d);
-  line-height: 1.4;
-  text-align: left;
-}
-
-/* ------------------------------------------------------------
-   🧠 Campo de input dinâmico para perguntas (JS injeta)
------------------------------------------------------------- */
-#cloudinhoInput {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid var(--brand-200, #d5e0ff);
-  border-radius: 8px;
-  font-size: 0.85rem;
-  color: #333;
-  outline: none;
-  margin-bottom: 10px;
-  transition: 0.2s;
-}
-#cloudinhoInput:focus {
-  border-color: var(--brand-400, #7da2ff);
-  box-shadow: 0 0 4px rgba(77, 120, 255, 0.3);
-}
-
-/* ------------------------------------------------------------
-   🎛️ Botões dentro do balão (Enviar / Adotar / Contato)
------------------------------------------------------------- */
-.cloudinho-actions,
-.bubble-actions {
-  display: flex;
+  bottom: 115px;
+  right: 30px;
+  width: 270px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+  display: none;
+  flex-direction: column;
   gap: 8px;
+  padding: 14px;
+  font-family: "Segoe UI", sans-serif;
+  animation: fadeInUp 0.4s ease forwards;
+  z-index: 999;
 }
 
-.cloudinho-actions button,
-.bubble-actions .btn,
+.cloudinho-bubble.show {
+  display: flex;
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+.cloudinho-bubble.hide {
+  animation: fadeOutDown 0.4s ease forwards;
+}
+
+.cloudinho-bubble p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.4em;
+}
+
+.cloudinho-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
 .btn-cloud {
   flex: 1;
-  padding: 7px 9px;
-  font-size: 0.85rem;
+  margin: 2px;
+  padding: 6px 8px;
+  border: none;
   border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-/* Botão padrão do Cloudinho */
-.btn-cloud {
-  background: var(--brand-500, #4a8dff);
-  color: #fff;
-  border: none;
-}
-.btn-cloud:hover {
-  background: var(--brand-400, #6ea3ff);
-  transform: scale(1.03);
-}
-
-/* Variações originais de estilo */
-.bubble-actions .btn-soft {
-  background: var(--brand-500, #4a8dff);
+  background: linear-gradient(135deg, #4a90e2, #3578d4);
   color: white;
-}
-.bubble-actions .btn-soft:hover {
-  background: var(--brand-400, #6ea3ff);
-  transform: scale(1.03);
-}
-.bubble-actions .btn-outline {
-  background: white;
-  color: var(--brand-600, #305adb);
-  border: 1px solid var(--brand-400, #90aaff);
-}
-.bubble-actions .btn-outline:hover {
-  background: var(--brand-50, #e8f0ff);
-  transform: scale(1.03);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: transform 0.2s ease, background 0.3s ease;
 }
 
-/* ------------------------------------------------------------
-   🌬️ Animação de flutuação da nuvem
------------------------------------------------------------- */
-@keyframes flutuar {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+.btn-cloud:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #5aa0f0, #3d82e0);
 }
 
-/* ------------------------------------------------------------
-   📱 Responsividade — telas menores e WebView MAUI
------------------------------------------------------------- */
-@media (max-width: 768px) {
-  .cloudinho-btn,
-  .cloudinho-button {
-    width: 75px;
-    height: 75px;
-    bottom: 70px;
-    right: 15px;
-  }
+#cloudinhoInput {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 6px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
 
-  .cloudinho-bubble {
-    width: 240px;
-    bottom: 160px;
-    right: 10px;
-  }
+#cloudinhoInput:focus {
+  border-color: #4a90e2;
+}
 
-  .cloudinho-actions,
-  .bubble-actions {
-    flex-direction: column;
-  }
+/* ============================================================
+   ✨ Animações suaves de entrada/saída
+   ============================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOutDown {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(15px); }
 }
