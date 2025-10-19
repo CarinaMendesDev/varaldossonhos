@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const sonho = c.fields?.sonho || "Sonho não informado";
       const irmaos = c.fields?.irmaos || "Não informado";
       const imagem = c.fields?.imagem_cartinha?.[0]?.url || "imagens/sem-imagem.jpg";
-      const sexo = c.fields?.sexo === "menina" ? "imagens/avatar-menina.png" : "imagens/avatar-menino.png";
+      const sexo = c.fields?.sexo === "menina" ? "imagens/menina.jpg" : "imagens/menino.jpg";
       const id = c.fields?.id_cartinha || Math.random().toString(36).substring(2, 9);
 
       const card = document.createElement("div");
