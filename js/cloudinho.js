@@ -1,227 +1,145 @@
 // ============================================================
-// ☁️ CLOUDINHO ASSISTENTE — Fantástica Fábrica de Sonhos
-// ------------------------------------------------------------
-// Interface flutuante + base de conhecimento (Airtable)
-// Comunicação via /api/index.js (rotas: GET e POST /api/cloudinho)
-// ------------------------------------------------------------
-// Compatível com:
-// ✅ Airtable (base cloudinho_kb)
-// ✅ Vercel (API unificada)
-// ✅ .NET MAUI WebView (injetável)
-// ✅ EmailJS (botão de contato)
+// ☁️ CLOUDINHO — Widget Profissional Auto-Curativo (2025)
+// - Monta o HTML do Cloudinho no <body>
+// - Recria automaticamente se algum script apagar/esvaziar
+// - Evita listeners duplicados
+// - Garante visibilidade e z-index alto
 // ============================================================
 
-document.addEventListener("DOMContentLoaded", async () => {
-  await carregarRespostasCloudinho(); // carrega base Airtable
-  montarInterfaceCloudinho();         // injeta HTML dinâmico
-  inicializarCloudinho();             // ativa interação
-  mostrarMensagemInicial();           // fala automaticamente
-});
+(() => {
+  const ROOT_ID = "cloudinho";
+  const IMG_SRC = "imagens/cloudinho.png";
+  const ZMAX = 2147483647;
 
-// ============================================================
-// 🔹 Carrega respostas do Airtable (GET /api/cloudinho)
-// ============================================================
-async function carregarRespostasCloudinho() {
-  try {
-    const res = await fetch("/api/cloudinho");
-    const dados = await res.json();
-    window.cloudinhoKB = dados || [];
-  } catch (erro) {
-    console.error("❌ Erro ao carregar base de conhecimento:", erro);
-    window.cloudinhoKB = [];
+  let inactivityTimer = null;
+  let observer = null;
+
+  // ---------- Cria/garante o container raiz ----------
+  function ensureRoot() {
+    let root = document.getElementById(ROOT_ID);
+    if (!root) {
+      root = document.createElement("div");
+      root.id = ROOT_ID;
+      root.style.position = "fixed";
+      root.style.bottom = "20px";
+      root.style.right = "20px";
+      root.style.zIndex = String(ZMAX);
+      root.style.display = "flex";
+      root.style.flexDirection = "column";
+      root.style.alignItems = "flex-end";
+      root.style.gap = "8px";
+      root.style.opacity = "1";
+      root.style.transition = "opacity .8s ease";
+      document.body.appendChild(root);
+    }
+    return root;
   }
-}
 
-// ============================================================
-// 🧩 Cria o HTML do Cloudinho dinamicamente (usa imagem PNG)
-// ============================================================
-function montarInterfaceCloudinho() {
-  if (document.getElementById("cloudinhoBtn")) return; // evita duplicação
+  // ---------- Renderiza o conteúdo (botão + balão) ----------
+  function render() {
+    const root = ensureRoot();
 
-  const container =
-    document.getElementById("cloudinho") ||
-    document.body.appendChild(document.createElement("div"));
+    // Se já está renderizado, não refaz
+    if (root.querySelector("#cloudinhoBtn") && root.querySelector("#cloudinhoBubble")) return;
 
-  container.innerHTML = `
-    <div id="cloudinhoBtn" class="cloudinho-btn" title="Fale com o Cloudinho ☁️">
-      <img src="imagens/cloudinho.png" alt="Cloudinho mascote" class="cloudinho-img" />
-    </div>
-    <div id="cloudinhoBubble" class="cloudinho-bubble">
-      <p id="cloudinhoText">Olá! ☁️ Sou o Cloudinho 💙</p>
-      <input id="cloudinhoInput" type="text" placeholder="Digite sua pergunta..." />
-      <div class="cloudinho-actions">
-        <button id="cloudSend" class="btn-cloud">Enviar</button>
-        <button id="cloudAdotar" class="btn-cloud">💌 Adotar</button>
-        <button id="cloudContato" class="btn-cloud">📩 Contato</button>
+    root.innerHTML = `
+      <button id="cloudinhoBtn" title="Fale com o Cloudinho" style="background:none;border:none;cursor:pointer;padding:0;">
+        <img src="${IMG_SRC}" alt="Cloudinho" class="cloudinho-img">
+      </button>
+      <div id="cloudinhoBubble" class="cloudinho-bubble hidden">
+        <p id="cloudinhoMessage">Oi! Eu sou o Cloudinho ☁️<br>Como posso te ajudar hoje?</p>
       </div>
-    </div>
-  `;
-}
+    `;
 
-// ============================================================
-// 💬 Inicializa eventos e interação
-// ============================================================
-function inicializarCloudinho() {
-  const bubble = document.getElementById("cloudinhoBubble");
-  const button = document.getElementById("cloudinhoBtn");
-  const text = document.getElementById("cloudinhoText");
-  const input = document.getElementById("cloudinhoInput");
-  const btnSend = document.getElementById("cloudSend");
-  const btnAdotar = document.getElementById("cloudAdotar");
-  const btnContato = document.getElementById("cloudContato");
+    attachBehavior();
+    // Mensagem de boas-vindas automática
+    setTimeout(() => showBubble("Olá! 👋 Sou o Cloudinho — posso te ajudar com o Varal dos Sonhos?"), 1200);
+    console.info("☁️ Cloudinho montado.");
+  }
 
-  if (!button || !bubble) return;
+  // ---------- Liga os comportamentos ----------
+  function attachBehavior() {
+    const root = document.getElementById(ROOT_ID);
+    const btn = document.getElementById("cloudinhoBtn");
+    const bubble = document.getElementById("cloudinhoBubble");
+    const msg = document.getElementById("cloudinhoMessage");
 
-  // 🔄 Mostrar / ocultar balão manualmente
-  button.addEventListener("click", () => {
-    bubble.classList.toggle("show");
-  });
+    if (!root || !btn || !bubble || !msg) return;
 
-  // 💬 Enviar pergunta
-  let debounceTimer;
-  const enviarPergunta = async () => {
-    const pergunta = input.value.trim();
-    if (!pergunta) return;
+    // Remove handlers antigos para evitar duplicidade
+    const freshBtn = btn.cloneNode(true);
+    btn.replaceWith(freshBtn);
 
-    text.textContent = "Digitando... ☁️";
-    input.value = "";
+    freshBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (bubble.classList.contains("show")) hideBubble();
+      else showBubble("Oi! Eu sou o Cloudinho ☁️<br>Como posso te ajudar hoje?");
+    });
 
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(async () => {
-      const resposta = await enviarPerguntaAPI(pergunta);
-      text.textContent = resposta || "Hmm... não encontrei nada sobre isso 💭";
-    }, 400);
-  };
+    document.addEventListener("click", outsideHandler);
+  }
 
-  btnSend.addEventListener("click", enviarPergunta);
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") enviarPergunta();
-  });
+  function outsideHandler(e) {
+    const root = document.getElementById(ROOT_ID);
+    const bubble = document.getElementById("cloudinhoBubble");
+    if (!root || !bubble) return;
+    if (!root.contains(e.target)) hideBubble();
+  }
 
-  // 📤 Adotar
-  btnAdotar?.addEventListener("click", () => {
-    window.location.href = "cartinhas.html";
-  });
-
-  // 📞 Contato (via EmailJS ou fallback mailto)
-  btnContato?.addEventListener("click", () => {
-    if (typeof emailjs !== "undefined") {
-      emailjs.send("service_varaldossonhos", "template_contato", {
-        to_name: "Equipe Varal dos Sonhos",
-        message: "Contato via Cloudinho ☁️",
-      });
-      text.textContent = "📩 Mensagem enviada! Obrigado 💙";
-    } else {
-      window.open("mailto:contato@varaldossonhos.org", "_blank");
-    }
-  });
-}
-
-// ============================================================
-// 💬 Mostra mensagem inicial e recolhe se não houver interação
-// ============================================================
-function mostrarMensagemInicial() {
-  const bubble = document.getElementById("cloudinhoBubble");
-  const text = document.getElementById("cloudinhoText");
-  const input = document.getElementById("cloudinhoInput");
-
-  if (!bubble || !text) return;
-
-  // Mostra o balão 1s após carregar
-  setTimeout(() => {
+  function showBubble(text) {
+    const bubble = document.getElementById("cloudinhoBubble");
+    const msg = document.getElementById("cloudinhoMessage");
+    if (!bubble || !msg) return;
+    msg.innerHTML = text;
+    bubble.classList.remove("hidden");
     bubble.classList.add("show");
-    text.textContent = "Olá! ☁️ Sou o Cloudinho, seu assistente dos sonhos 💙";
-  }, 1000);
-
-  // Depois de 3s, complementa
-  setTimeout(() => {
-    text.textContent += " Quer adotar um sonho hoje?";
-  }, 3000);
-
-  // ⏰ Recolhe se não houver interação
-  let interagiu = false;
-  input?.addEventListener("input", () => (interagiu = true));
-  bubble?.addEventListener("click", () => (interagiu = true));
-
-  setTimeout(() => {
-    if (!interagiu) bubble.classList.remove("show");
-  }, 10000); // 10 segundos
-}
-
-// ============================================================
-// 🧠 Busca local (cache do Airtable)
-// ============================================================
-function buscarRespostaLocal(pergunta) {
-  if (!window.cloudinhoKB || window.cloudinhoKB.length === 0) return null;
-  pergunta = pergunta.toLowerCase();
-
-  for (const item of window.cloudinhoKB) {
-    const palavras = (item.palavras_chave || []).map((p) => p.toLowerCase());
-    if (palavras.some((p) => pergunta.includes(p))) {
-      return item.resposta;
-    }
+    resetInactivity();
   }
-  return null;
-}
 
-// ============================================================
-// 🌐 Busca via API (fallback remoto + log)
-// ============================================================
-async function enviarPerguntaAPI(pergunta) {
-  const local = buscarRespostaLocal(pergunta);
-  const origem = detectarOrigem();
+  function hideBubble() {
+    const bubble = document.getElementById("cloudinhoBubble");
+    if (!bubble) return;
+    bubble.classList.remove("show");
+    setTimeout(() => bubble.classList.add("hidden"), 350);
+    clearTimeout(inactivityTimer);
+  }
 
-  try {
-    const res = await fetch("/api/cloudinho", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mensagem: pergunta, origem }),
+  function resetInactivity() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(hideBubble, 6000);
+  }
+
+  // ---------- Observa o DOM e “cura” se for apagado ----------
+  function startObserver() {
+    if (observer) observer.disconnect();
+    observer = new MutationObserver(() => {
+      const root = document.getElementById(ROOT_ID);
+      const hasBtn = root && root.querySelector("#cloudinhoBtn");
+      const hasBubble = root && root.querySelector("#cloudinhoBubble");
+      if (!root || !hasBtn || !hasBubble) {
+        render();
+      }
     });
-    const data = await res.json();
-
-    // 💾 registra log da interação
-    registrarInteracao(pergunta, data.resposta, origem);
-
-    return data.resposta;
-  } catch {
-    return "❌ Erro ao conectar com o servidor.";
+    observer.observe(document.body, { childList: true, subtree: true });
   }
-}
 
-// ============================================================
-// 💾 Registro da interação (para tabela interacoes_log)
-// ============================================================
-async function registrarInteracao(pergunta, resposta, origem = "Web") {
-  try {
-    await fetch("/api/interacoes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        pergunta,
-        resposta,
-        origem,
-        data: new Date().toISOString(),
-      }),
-    });
-  } catch (e) {
-    console.warn("⚠️ Não foi possível registrar interação:", e);
+  // ---------- Inicialização robusta ----------
+  function init() {
+    render();
+    startObserver();
+
+    // Redundância: alguns scripts trocam o body no onload; refaça por segurança
+    let tries = 0;
+    const retry = setInterval(() => {
+      tries++;
+      render();
+      if (tries >= 5) clearInterval(retry);
+    }, 700);
   }
-}
 
-// ============================================================
-// 📱 Detecta origem do acesso
-// ============================================================
-function detectarOrigem() {
-  if (window?.navigator?.userAgent?.includes("MAUI")) return ".NET MAUI";
-  if (/Android|iPhone|iPad/i.test(navigator.userAgent)) return "Mobile";
-  return "Web";
-}
-
-// ============================================================
-// 🌈 Exportações globais (.NET MAUI / Vercel)
-// ============================================================
-if (typeof window !== "undefined") {
-  window.inicializarCloudinho = inicializarCloudinho;
-  window.montarInterfaceCloudinho = montarInterfaceCloudinho;
-  window.carregarRespostasCloudinho = carregarRespostasCloudinho;
-}
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

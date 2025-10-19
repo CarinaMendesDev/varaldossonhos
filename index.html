@@ -56,7 +56,7 @@
 
         <!-- 🔹 Carrossel de eventos -->
         <div class="hero-carrossel">
-          <h2 class="titulo-carrossel">Momentos que inspiram 💫</h2>
+          <h2 class="titulo-carrossel">Momentos que inspiram ✨</h2>
           <div class="carousel-container">
             <button class="carousel-btn prev" id="carouselPrev">❮</button>
             <ul class="carousel-track" id="carouselTrack">
@@ -89,26 +89,12 @@
   <div id="footer"></div>
 
   <!-- ============================================================
-       ☁️ CLOUDINHO — mascote interativo com IA e sumiço automático
-       - Usa imagem: /imagens/cloudinho.png
-       - Interação: fala, responde e some após inatividade
-       - Integrado com /api/index.js → rotas Airtable, .NET MAUI, EmailJS
-  ============================================================ -->
-  <div id="cloudinho"></div>
-
-  <!-- ============================================================
-       📜 Scripts principais
+       📜 Scripts principais (ordem correta)
   ============================================================ -->
   <script type="module" src="js/componentes.js"></script>
   <script type="module" src="js/index.js"></script>
 
-  <!-- ☁️ Inicializa o Cloudinho dinamicamente -->
-  <script type="module">
-    import { carregarCloudinho } from "./js/cloudinho.js";
-    carregarCloudinho({
-      imagem: "imagens/cloudinho.png",
-      tempoSumir: 10000 // 10 segundos sem interação
-    });
-  </script>
+  <!-- ☁️ Cloudinho: o HTML será montado pelo próprio JS abaixo -->
+  <script src="js/cloudinho.js"></script>
 </body>
 </html>
