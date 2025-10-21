@@ -2,7 +2,7 @@
 // 💬 Notificador — Envio de mensagem via WhatsApp e EmailJS
 // ============================================================
 
-// Gera link do WhatsApp automaticamente
+// Gera link do WhatsApp automaticamente.
 export function enviarWhatsApp(telefone, mensagem) {
   try {
     const numeroLimpo = telefone.replace(/\D/g, "");

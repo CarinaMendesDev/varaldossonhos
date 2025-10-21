@@ -1,5 +1,5 @@
 // ====================================================
-// ☁️ Cloudinho - Envio automático de e-mail via EmailJS
+// ☁️ Cloudinho - Envio automático de e-mail via EmailJS.
 // ====================================================
 
 // Inicializa a API do EmailJS com sua chave pública

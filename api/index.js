@@ -6,7 +6,7 @@
 //   • EmailJS (ou outro serviço de envio de e-mails) — enviar confirmações
 //   • .NET MAUI — consumo de rotas REST (login, cadastro, doações etc.)
 //   • Google Maps — uso dos campos lat/lng em pontos de coleta
-//   • Cloudinho — assistente automático (FAQ inteligente)
+//   • Cloudinho — assistente automático (FAQ inteligente).
 // ============================================================
 
 import Airtable from "airtable";

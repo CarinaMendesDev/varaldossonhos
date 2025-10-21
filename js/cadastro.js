@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tipo_usuario = document.getElementById("tipo_usuario")?.value;
     const senha = document.getElementById("senha")?.value.trim();
 
-    // Validação simples
+    // Validação simples.
     if (!nome || !cep || !endereco || !cidade || !email || !telefone || !tipo_usuario || !senha) {
       alert("Por favor, preencha todos os campos obrigatórios.");
       return;

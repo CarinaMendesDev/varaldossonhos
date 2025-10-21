@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loginLink.style.color = "#1E50E2";
   }
 
-  // Carregar cartinhas do banco (API)
+  // Carregar cartinhas do banco (API).
   try {
     const response = await fetch("/api/cartinhas");
     if (!response.ok) throw new Error("Erro ao carregar cartinhas");

@@ -1,6 +1,6 @@
 // ============================================================
 // 🌐 VARAL DOS SONHOS — evento-detalhe.js
-// Exibe as informações completas de um evento selecionado
+// Exibe as informações completas de um evento selecionado.
 // ============================================================
 
 import { carregarComponentes, atualizarLogin } from "./componentes.js";

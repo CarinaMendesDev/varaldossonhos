@@ -1,6 +1,6 @@
 // ============================================================
 // 💙 VARAL DOS SONHOS — js/login.js
-// Valida login, consulta API e salva usuário localmente
+// Valida login, consulta API e salva usuário localmente.
 // ============================================================
 
 document.getElementById("btnLogin").addEventListener("click", async () => {

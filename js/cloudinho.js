@@ -14,7 +14,7 @@
   let inactivityTimer = null;
   let observer = null;
 
-  // ---------- Cria/garante o container raiz ----------
+  // ---------- Cria/garante o container raiz. ----------
   function ensureRoot() {
     let root = document.getElementById(ROOT_ID);
     if (!root) {

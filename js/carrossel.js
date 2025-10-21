@@ -6,7 +6,7 @@ const prev  = document.getElementById('carouselPrev');
 const next  = document.getElementById('carouselNext');
 
 if (track) {
-  // Limite máximo de 15 imagens
+  // Limite máximo de 15 imagens.
   const slides = Array.from(track.querySelectorAll('.carousel-slide')).slice(0, 15);
 
   // Se tiver menos que 4, não clona (não precisa de loop)

@@ -9,7 +9,7 @@
 //    EMAILJS_USER_ID
 // ------------------------------------------------------------
 // 🏆 Recursos:
-//   - Simulação automática se EmailJS não estiver configurado
+//   - Simulação automática se EmailJS não estiver configurado.
 //   - Mensagem de pontuação automática (ex: “Você ganhou 10 pontos!”)
 // ============================================================
 

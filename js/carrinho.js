@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectPontos = document.getElementById("selectPontos");
   const verNoMapa = document.getElementById("verNoMapa");
 
-  // modal mapa
+  // modal mapa.
   const mapModal = document.getElementById("mapModal");
   const mapFrame = document.getElementById("mapFrame");
   const closeMap = document.getElementById("closeMap");

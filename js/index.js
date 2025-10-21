@@ -4,7 +4,7 @@
 // Página inicial — controla o carrossel dinâmico de eventos
 // com destaque_home = true (vitrine de campanhas solidárias).
 // ------------------------------------------------------------
-// 🔗 API utilizada: /api/eventos  (ou /api/index?rota=eventos)
+// 🔗 API utilizada: /api/eventos  (ou /api/index?rota=eventos).
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", () => {

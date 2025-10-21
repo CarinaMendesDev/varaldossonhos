@@ -3,7 +3,7 @@
 // ------------------------------------------------------------
 // Tela "Pontos de Coleta":
 //  - Busca dados no Airtable via /api/pontosdecoleta (ou /api/index?rota=pontosdecoleta)
-//  - Renderiza cards em um "varal" com pregadores
+//  - Renderiza cards em um "varal" com pregadores.
 //  - Abre Google Maps em modal ao clicar "Ver no mapa"
 //  - Compatível com Vercel, Airtable e .NET MAUI WebView
 // ============================================================

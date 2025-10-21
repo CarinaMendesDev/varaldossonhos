@@ -1,6 +1,6 @@
 // ============================================================
 // 🌐 VARAL DOS SONHOS — eventos.js
-// Lista todos os eventos da tabela "eventos" do Airtable
+// Lista todos os eventos da tabela "eventos" do Airtable.
 // ============================================================
 
 import { carregarComponentes, atualizarLogin } from "./componentes.js";

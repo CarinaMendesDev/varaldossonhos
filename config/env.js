@@ -1,6 +1,6 @@
 // ============================================================
 // ⚙️ VARAL DOS SONHOS — config/env.js
-// Carrega variáveis de ambiente (.env.local) e mapeia tabelas do Airtable
+// Carrega variáveis de ambiente (.env.local) e mapeia tabelas do Airtable.
 // ============================================================
 
 import dotenv from "dotenv";

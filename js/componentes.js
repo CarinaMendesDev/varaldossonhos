@@ -10,7 +10,7 @@
 // 🔗 Compatível com: .NET MAUI WebView, Vercel, Airtable, EmailJS
 // ------------------------------------------------------------
 // Observação importante:
-//   O antigo /api/cloudinho.js foi removido —
+//   O antigo /api/cloudinho.js foi removido. —
 //   Cloudinho agora é injetado dinamicamente via js/cloudinho.js
 // ============================================================
 
