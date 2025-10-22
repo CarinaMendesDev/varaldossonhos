@@ -407,9 +407,8 @@ input:focus, select:focus, textarea:focus {
 
 
 /* ============================================================
- 💙 COMO FUNCIONA — Página de instruções do Varal Virtual
+ 💙 COMO FUNCIONA — Página do Varal Virtual
 ============================================================ */
-
 .secao-funciona {
   background: linear-gradient(180deg, var(--azul-claro) 0%, var(--branco) 100%);
   padding: 100px 0;
@@ -447,7 +446,7 @@ input:focus, select:focus, textarea:focus {
 
 .img-varal {
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
   margin: 1.5rem auto;
   display: block;
 }
@@ -457,11 +456,17 @@ input:focus, select:focus, textarea:focus {
   margin-left: 1.5rem;
   color: var(--azul-escuro);
   font-size: 1rem;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 .texto-funciona li {
   margin-bottom: 1rem;
+}
+
+.texto-funciona a {
+  color: var(--azul-medio);
+  text-decoration: underline;
+  font-weight: 600;
 }
 
 .texto-funciona strong {

@@ -1,21 +1,30 @@
 /* ============================================================
-   ☁️ CLOUDINHO — Mascote Interativo
-   Fica fixo no canto inferior direito e some após inatividade.
+ ☁️ CLOUDINHO — Estilo Completo e Corrigido (2025)
+------------------------------------------------------------
+   • Mascote flutuante no canto inferior direito
+   • Balão de fala fixo acima da nuvem
+   • Setinha azul clara conectando o balão ao mascote
+   • Responsivo para mobile
 ============================================================ */
 
+/* Fonte padrão */
+@import url('https://fonts.googleapis.com/css2?family=Questrial&family=Shadows+Into+Light+Two&display=swap');
+
+/* ===== CONTAINER PRINCIPAL ===== */
 #cloudinho {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 9999;
+  z-index: 99998;
+  width: auto;
+  height: auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  transition: all 0.3s ease;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-/* Botão com o Cloudinho */
+/* ===== BOTÃO / MASCOTE ===== */
 #cloudinhoBtn {
   background: none;
   border: none;
@@ -25,57 +34,125 @@
 }
 
 .cloudinho-img {
-  width: 90px;
+  width: 95px;
   height: auto;
   transition: transform 0.3s ease;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
 }
 
 .cloudinho-img:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
-/* Balão de fala */
-.cloudinho-bubble {
-  background-color: white;
-  color: #333;
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-family: "Segoe UI", sans-serif;
+/* ===== BALÃO DE CONVERSA ===== */
+#cloudinhoBubble {
+  position: fixed;
+  bottom: calc(20px + 95px + 16px); /* 👉 sempre acima do mascote */
+  right: 20px;
+
+  width: 260px;
+  background: #ffffff;
+  border: 1px solid #d0e4ff;
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+
+  font-family: "Questrial", sans-serif;
   font-size: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  max-width: 260px;
+  color: #333;
+
   opacity: 0;
   transform: translateY(10px);
-  transition: all 0.4s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
+
+  z-index: 99999;
 }
 
-/* Quando o balão estiver visível */
-.cloudinho-bubble.show {
+/* ===== VISIBILIDADE ===== */
+#cloudinhoBubble.show {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
 
-/* Esconde visualmente */
-.hidden {
+#cloudinhoBubble.hidden {
   display: none;
 }
 
-/* Responsividade */
+/* ===== SETINHA DO BALÃO ===== */
+#cloudinhoBubble::after {
+  content: "";
+  position: absolute;
+  right: 26px;
+  bottom: -10px;
+  border-width: 10px 10px 0 10px;
+  border-style: solid;
+  border-color: #ffffff transparent transparent transparent;
+  filter: drop-shadow(0 -1px 0 #d0e4ff);
+}
+
+/* ===== TEXTO DO BALÃO ===== */
+#cloudinhoMessage {
+  line-height: 1.5;
+  font-size: 15px;
+  color: #333;
+}
+
+/* ===== CAMPO DE TEXTO ===== */
+#cloudinhoInput {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #cdd9f0;
+  padding: 6px 8px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: border 0.2s;
+}
+
+#cloudinhoInput:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
+}
+
+/* ===== ANIMAÇÃO DE PISCAR ===== */
+@keyframes piscar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.cloudinho-img {
+  animation: piscar 3s ease-in-out infinite;
+}
+
+/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
   #cloudinho {
     bottom: 10px;
     right: 10px;
   }
 
-  .cloudinho-img {
-    width: 70px;
+  #cloudinhoBubble {
+    width: 220px;
+    bottom: calc(10px + 80px + 10px);
+    right: 10px;
+    font-size: 14px;
   }
 
-  .cloudinho-bubble {
-    font-size: 14px;
-    max-width: 200px;
+  .cloudinho-img {
+    width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  #cloudinhoBubble {
+    width: 200px;
+    padding: 10px;
+    bottom: calc(10px + 70px + 8px);
+  }
+
+  .cloudinho-img {
+    width: 70px;
   }
 }
